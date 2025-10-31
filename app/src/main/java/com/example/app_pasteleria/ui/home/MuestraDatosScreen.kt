@@ -8,17 +8,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.app_pasteleria.viewmodel.CatalogoViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MuestraDatosScreen(
     username: String,
-    navController: NavController
+    navController: NavController,
+    viewModel: CatalogoViewModel
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Muestra Datos") }
+                title = { Text("Catálogo") }
             )
         }
     ) { innerPadding ->
