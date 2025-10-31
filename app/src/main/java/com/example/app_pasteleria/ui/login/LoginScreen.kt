@@ -31,6 +31,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import com.example.app_pasteleria.R
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -94,10 +95,10 @@ fun LoginScreen(
                 //Define  que elementos dentro la columna estaran separados por 20.dp
             )// fin column
             {// inicio Contenido
-                Text(text="Bienvenido !",
+                Text(text="¡Pastelería 1000 Sabores!",
                     style= MaterialTheme.typography.headlineMedium,
-                    color=MaterialTheme.colorScheme.primary
-
+                    color=MaterialTheme.colorScheme.primary,
+                    fontWeight = FontWeight.Bold,
 
                 ) // Muestra un texto simple en la pantalla
 
@@ -127,34 +128,21 @@ fun LoginScreen(
 
                 Spacer(modifier = Modifier.height(66.dp))
 
-
-
-
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                        .padding(horizontal = 10.dp)
+                        .padding(bottom = 0.dp)
                 )// Fin Row
                 {// Aplica row
-                    Text("texto uno",
+                    Text("Nombre de Usuario",
                         style =MaterialTheme.typography.bodyLarge.copy(
-                            color=MaterialTheme.colorScheme.onSurface.copy(alpha=0.8f),
+                            color=MaterialTheme.colorScheme.onSurface.copy(alpha=0.9f),
                             fontWeight = FontWeight.Bold),
                         modifier = Modifier
-                            .padding(end=8.dp)
+                            .padding(end=3.dp)
+
                     )// fin texto 1
-
-
-                    Text("texto dos",
-                        style =MaterialTheme.typography.bodyLarge.copy(
-                            color=MaterialTheme.colorScheme.onSurface.copy(alpha=0.8f),
-                            fontWeight = FontWeight.Bold),
-                        modifier = Modifier
-                            .padding(end=8.dp)
-                    )// fin texto 1
-
-
                 } // fin Aplica row
 
                 OutlinedTextField(
@@ -165,6 +153,22 @@ fun LoginScreen(
                     modifier = Modifier.fillMaxWidth(0.95f)
 
                 )//fin de lined text field para usuario
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 10.dp)
+                        .padding(bottom = 0.dp)
+                )
+                {
+                    Text("Contraseña",
+                        style =MaterialTheme.typography.bodyLarge.copy(
+                            color=MaterialTheme.colorScheme.onSurface.copy(alpha=0.9f),
+                            fontWeight = FontWeight.Bold),
+                        modifier = Modifier
+                            .padding(end=8.dp)
+                    )// fin texto 2
+                }
                 OutlinedTextField(
                     value = state.password,
                     onValueChange = vm::onPasswordChange,
