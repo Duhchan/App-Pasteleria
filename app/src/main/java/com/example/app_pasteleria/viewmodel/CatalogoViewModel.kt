@@ -8,15 +8,15 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class ProductoViewModel : ViewModel(){
+class CatalogoViewModel : ViewModel(){
     private val _pasteles = MutableStateFlow<List<Catalogo>>(emptyList())
     val pasteles: StateFlow<List<Catalogo>> = _pasteles.asStateFlow()
 
-    fun guardarProducto(producto: Catalogo){
+    fun guardarPastel(catalogo: Catalogo){
         viewModelScope.launch {
             // guardar en memoria
 
-            val nuevaLista = _pasteles.value + producto
+            val nuevaLista = _pasteles.value + catalogo
             _pasteles.value = nuevaLista
         }
 
