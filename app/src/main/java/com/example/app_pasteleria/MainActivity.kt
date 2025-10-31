@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
             AppPasteleriaTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
-                        name = "Android",
+                        name = "la wea mala",
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
