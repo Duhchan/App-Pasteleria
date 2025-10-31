@@ -143,7 +143,7 @@ fun LoginScreen(
                         .padding(bottom = 0.dp)
                 )// Fin Row
                 {// Aplica row
-                    Text("Nombre de Usuario",
+                    Text("Correo Electrónico",
                         style =MaterialTheme.typography.bodyLarge.copy(
                             color=MaterialTheme.colorScheme.onSurface.copy(alpha=0.9f),
                             fontWeight = FontWeight.Bold),
@@ -154,9 +154,9 @@ fun LoginScreen(
                 } // fin Aplica row
 
                 OutlinedTextField(
-                    value = state.username,
+                    value = state.correo,
                     onValueChange = vm::onUsernameChange,
-                    label ={Text("Usuario",
+                    label ={Text("Correo",
                         color = ColorScheme.onSurface)},
                     singleLine = true ,
                     modifier = Modifier.fillMaxWidth(0.95f),
@@ -206,7 +206,7 @@ fun LoginScreen(
 
                 // agregar un espacio entre la imagen y el boton
 
-                Spacer(modifier = Modifier.height(66.dp))
+                Spacer(modifier = Modifier.height(50.dp))
 
                 Button(onClick = {/* accion futura*/
                     vm.submit { user ->
@@ -231,6 +231,32 @@ fun LoginScreen(
                 {
                     //Text("Presioname")
                     Text (if(state.isLoading)"Validando" else "Iniciar Sesion")
+
+                } // fin boton
+
+                Button(onClick = {/* accion futura*/
+                    vm.submit { user ->
+                        navController.navigate("DrawerMenu/user")
+                        //Navegar a una pantalla pasando el parametro
+                        {//inicio navegar
+                            popUpTo("login") { inclusive = true }
+                            //No puede volver al login con back
+
+                            //Evite crear una nueva instancia o el misma pagina
+                            launchSingleTop = true
+                        }//termino navegar
+
+                    }//fin submit
+                },
+                    enabled =  !state.isLoading,
+                    modifier = Modifier.fillMaxWidth(0.6f)
+
+
+                )//fin button
+
+                {
+                    //Text("Presioname")
+                    Text (if(state.isLoading)"Validando" else "Registrarse")
 
                 } // fin boton
 

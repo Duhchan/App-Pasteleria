@@ -13,7 +13,7 @@ class LoginViewModel(
 ): ViewModel(){
     var uiState by mutableStateOf(LoginUiState())
     fun onUsernameChange(value:String){
-        uiState = uiState.copy(username =value, error= null )
+        uiState = uiState.copy(correo =value, error= null )
         //la funcion copy es la que lleva el contenido hacia atras
     }//fin nameChange
 
@@ -26,12 +26,12 @@ class LoginViewModel(
     fun submit(onSucces:(String)->Unit){
         uiState = uiState.copy(isLoading = true, error = null)
 
-        val oK = repo.login(uiState.username.trim(),uiState.password)
+        val oK = repo.login(uiState.correo.trim(),uiState.password)
 
         uiState = uiState.copy(isLoading = false,error= null)
 
-        if (oK) onSucces (uiState.username.trim())
-        else uiState = uiState.copy(error = "Credenciales Invalidas")
+        if (oK) onSucces (uiState.correo.trim())
+        else uiState = uiState.copy(error = "Credenciales Inválidas")
 
     }
 }//  fin viewModel
