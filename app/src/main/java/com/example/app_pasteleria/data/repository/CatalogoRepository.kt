@@ -6,11 +6,11 @@ import kotlinx.coroutines.flow.Flow
 
 class CatalogoRepository (private val catalogoDao: CatalogoDao) {
 
-    suspend fun insertarCatalogo(catalogo: Catalogo) {
-        catalogoDao.insertarCatalogo(catalogo)
+    suspend fun insertarCatalogo(pastel: Catalogo) {
+        catalogoDao.insertarPastel(pastel)
     }
 
-    fun obtenerProdutos(): Flow<List<Catalogo>>{
+    fun obtenerProductos(): Flow<List<Catalogo>>{
         return catalogoDao.obtenerCatalogo()
     }
 }

@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface CatalogoDao{
     @Insert
-    suspend fun insertarCatalogo(catalogo: Catalogo)
+    suspend fun insertarPastel(pastel: Catalogo)
 
     @Query("SELECT * FROM catalogo")
     fun obtenerCatalogo(): Flow<List<Catalogo>>
