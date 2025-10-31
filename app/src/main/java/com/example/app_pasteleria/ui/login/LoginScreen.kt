@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -18,6 +19,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
@@ -32,14 +34,20 @@ import androidx.compose.ui.layout.ContentScale
 import com.example.app_pasteleria.R
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import java.time.format.TextStyle
+
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -56,9 +64,9 @@ fun LoginScreen(
 
     // darkColorScheme  es una funcion de material3 que define un color oscuro
     val ColorScheme = darkColorScheme(
-        primary= Color(0xFF98222E),
+        primary= Color(0xFF79594F),
         onPrimary = Color.White,
-        onSurface = Color(0xFF333333), //Gris
+        onSurface = Color(0xFF553A2A), //Gris
     ) // fin dark
 
 
@@ -69,15 +77,15 @@ fun LoginScreen(
 
 
         Scaffold (
-            // Crea Estuctra basica de la pantalla Se define topBar, BottomBar
             topBar = {
-                TopAppBar(title = {Text("Mi Primer App",
-                    color =MaterialTheme.colorScheme.onPrimary,
-                )})
+                CenterAlignedTopAppBar(title = {Text("¡Pastelería 1000 Sabores!",
+                    style= MaterialTheme.typography.headlineLarge,
+                    color= Color(0xFF886655),
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = FontFamily.Cursive
+                )})  // Encabezado Nombre de Pastelería
+            }// Crea Estuctra basica de la pantalla Se define topBar, BottomBar
 
-                // Crea un AppBar con un titulo
-
-            }// fin topBar
         ) // fin Scaff
         {// Inicio Inner
                 innerPadding ->
@@ -89,17 +97,17 @@ fun LoginScreen(
                     // Evita que quede oculto
                     .fillMaxSize() // Hace que la columnna tome el todo el tamaño
                     .padding(16.dp)
-                    .background(Color(0xFFF0F0F0)), // gris Claro
+                    .background(Color(0xFFFFDFBF)), // gris Claro
                 verticalArrangement = Arrangement.spacedBy(20.dp),
                 horizontalAlignment = Alignment.CenterHorizontally  // Centra horizontalmente
-                //Define  que elementos dentro la columna estaran separados por 20.dp
+            //Define  que elementos dentro la columna estaran separados por 20.dp
             )// fin column
             {// inicio Contenido
-                Text(text="¡Pastelería 1000 Sabores!",
-                    style= MaterialTheme.typography.headlineMedium,
-                    color=MaterialTheme.colorScheme.primary,
+                Text(text="¡Ingresa tus credenciales!",
+                    style= MaterialTheme.typography.headlineLarge,
+                    color= Color(0xFF886655),
                     fontWeight = FontWeight.Bold,
-
+                    fontFamily = FontFamily.Cursive
                 ) // Muestra un texto simple en la pantalla
 
 
@@ -148,10 +156,13 @@ fun LoginScreen(
                 OutlinedTextField(
                     value = state.username,
                     onValueChange = vm::onUsernameChange,
-                    label ={Text("Usuario")},
+                    label ={Text("Usuario",
+                        color = ColorScheme.onSurface)},
                     singleLine = true ,
-                    modifier = Modifier.fillMaxWidth(0.95f)
-
+                    modifier = Modifier.fillMaxWidth(0.95f),
+                    colors = TextFieldDefaults.colors(  //Colores para los Form
+                        focusedContainerColor = Color.Gray, //Casilla de Borde
+                        unfocusedContainerColor = Color.White) //Casilla de Fondo
                 )//fin de lined text field para usuario
 
                 Row(
@@ -172,15 +183,20 @@ fun LoginScreen(
                 OutlinedTextField(
                     value = state.password,
                     onValueChange = vm::onPasswordChange,
-                    label ={Text("Contraseña")},
+                    label ={Text("Contraseña",
+                        color = ColorScheme.onSurface)},
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = Color.Gray,
+                        unfocusedContainerColor = Color.White),
                     singleLine = true ,
                     visualTransformation = if (showPass) VisualTransformation.None else
-                        PasswordVisualTransformation(),//es el ojito para mostrar contraseña
+                        PasswordVisualTransformation(),//es el mono para mostrar contraseña
 
                     trailingIcon = {
                         TextButton(onClick = {showPass =!showPass})
                         {
-                            Text(if (showPass)"Ocultar" else "Ver")
+                            Text(if (showPass)"\uD83D\uDE48" else "\uD83D\uDE49",
+                                fontSize = 30.sp)
                         }
                     },//fin trail
                     modifier = Modifier.fillMaxWidth(0.95f)
