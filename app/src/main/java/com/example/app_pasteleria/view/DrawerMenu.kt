@@ -3,6 +3,7 @@ package com.example.app_pasteleria.view
 
 import android.net.Uri
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,22 +12,28 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BakeryDining
 import androidx.compose.material.icons.filled.BrunchDining
 import androidx.compose.material.icons.filled.Cake
 import androidx.compose.material.icons.filled.Cookie
 import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.BottomStart
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -45,8 +52,8 @@ fun DrawerMenu(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(120.dp) // dp: densidad de pixeles
-                .background(MaterialTheme.colorScheme.primary)
+                .height(90.dp) // dp: densidad de pixeles
+                .background(Color(0xFF79594F))
         ) // fin box
         { // inicio contenido
             Text(
@@ -54,22 +61,36 @@ fun DrawerMenu(
                 fontFamily = FontFamily.Cursive,
                 fontSize = 40.sp,
                 style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onPrimary,
+                color = Color(0xFFFFF3E0),
+                fontWeight = FontWeight.Bold,
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .padding(10.dp)
             )
         } // fin contenido
         // LazyColumn: crear lista de elementos que se pueden desplazar verticalmente
-        LazyColumn(modifier = Modifier.weight(1f)){
+
+        LazyColumn(
+            modifier = Modifier
+                .weight(1f)
+                .background(Color(0xFFFFDFBF))){
             item { //torta chocolate
                 NavigationDrawerItem(
                     label = { Text("Torta de Chocolate",
                         fontSize = 25.sp,
                         fontFamily = FontFamily.Cursive,
                         fontWeight = FontWeight.Bold,
-                        color= Color(0xFF886655)
+                        color= Color(0xFF5D4037)
                     )},
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp, vertical = 4.dp)
+                        .clip(RoundedCornerShape(20.dp))
+                        .border(
+                            width = 2.dp,
+                            Color(0xFF886655),
+                            shape = RoundedCornerShape(20.dp))
+                        .background(Color(0xFFFFF3E0)),
                     selected = false,
                     onClick = {
                         val nombre = Uri.encode("Torta de Chocolate")
@@ -77,7 +98,9 @@ fun DrawerMenu(
                         navController.navigate("CatalogoFormScreen/$nombre/$precio")
                     }, // fin OnClick
                     icon = { Icon(Icons.Filled.Cake , contentDescription = "Icono Torta",
-                            modifier = Modifier.size(40.dp))}
+                        tint = Color(0xFF5D4037),
+                        modifier = Modifier
+                                .size(40.dp))}
                 )
             } // fin item 1
 
@@ -87,7 +110,16 @@ fun DrawerMenu(
                         fontSize = 25.sp,
                         fontFamily = FontFamily.Cursive,
                         fontWeight = FontWeight.Bold,
-                        color= Color(0xFF886655))},
+                        color= Color(0xFF5D4037))},
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp, vertical = 4.dp)
+                        .clip(RoundedCornerShape(20.dp))
+                        .border(
+                            width = 2.dp,
+                            Color(0xFF886655),
+                            shape = RoundedCornerShape(20.dp))
+                        .background(Color(0xFFFFF3E0)),
                     selected = false,
                     onClick = {
                         val nombre = Uri.encode("Torta de Frutas")
@@ -96,6 +128,7 @@ fun DrawerMenu(
 
                     }, // fin OnClick
                     icon = { Icon(Icons.Filled.Cake , contentDescription = "Icono Torta",
+                        tint = Color(0xFF5D4037),
                         modifier = Modifier.size(40.dp))}
                 )
             } // fin item 2
@@ -106,7 +139,16 @@ fun DrawerMenu(
                         fontSize = 25.sp,
                         fontFamily = FontFamily.Cursive,
                         fontWeight = FontWeight.Bold,
-                        color= Color(0xFF886655))},
+                        color= Color(0xFF5D4037))},
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp, vertical = 4.dp)
+                        .clip(RoundedCornerShape(20.dp))
+                        .border(
+                            width = 2.dp,
+                            Color(0xFF886655),
+                            shape = RoundedCornerShape(20.dp))
+                        .background(Color(0xFFFFF3E0)),
                     selected = false,
                     onClick = {
                         val nombre = Uri.encode("Torta de Vainilla")
@@ -115,6 +157,7 @@ fun DrawerMenu(
 
                     }, // fin OnClick
                     icon = { Icon(Icons.Filled.Cake , contentDescription = "Icono Torta",
+                        tint = Color(0xFF5D4037),
                         modifier = Modifier.size(40.dp))}
                 )
             } // fin item 3
@@ -125,7 +168,16 @@ fun DrawerMenu(
                         fontSize = 25.sp,
                         fontFamily = FontFamily.Cursive,
                         fontWeight = FontWeight.Bold,
-                        color= Color(0xFF886655))},
+                        color= Color(0xFF5D4037))},
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp, vertical = 4.dp)
+                        .clip(RoundedCornerShape(20.dp))
+                        .border(
+                            width = 2.dp,
+                            Color(0xFF886655),
+                            shape = RoundedCornerShape(20.dp))
+                        .background(Color(0xFFFFF3E0)),
                     selected = false,
                     onClick = {
 
@@ -135,6 +187,7 @@ fun DrawerMenu(
 
                     }, // fin OnClick
                     icon = { Icon(Icons.Filled.Cake , contentDescription = "Icono Torta",
+                        tint = Color(0xFF5D4037),
                         modifier = Modifier.size(40.dp))}
                 )
             } // fin item 4
@@ -145,8 +198,16 @@ fun DrawerMenu(
                         fontSize = 25.sp,
                         fontFamily = FontFamily.Cursive,
                         fontWeight = FontWeight.Bold,
-                        color= Color(0xFF886655))},
-
+                        color= Color(0xFF5D4037))},
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp, vertical = 4.dp)
+                        .clip(RoundedCornerShape(20.dp))
+                        .border(
+                            width = 2.dp,
+                            Color(0xFF886655),
+                            shape = RoundedCornerShape(20.dp))
+                        .background(Color(0xFFFFF3E0)),
                     selected = false,
                     onClick = {
                         val nombre = Uri.encode("Mousse de Chocolate")
@@ -155,6 +216,7 @@ fun DrawerMenu(
 
                     }, // fin OnClick
                     icon = { Icon(Icons.Filled.BakeryDining , contentDescription = "Icono Torta",
+                        tint = Color(0xFF5D4037),
                         modifier = Modifier.size(40.dp))}
                 )
             } // fin item 5
@@ -164,7 +226,16 @@ fun DrawerMenu(
                         fontSize = 25.sp,
                         fontFamily = FontFamily.Cursive,
                         fontWeight = FontWeight.Bold,
-                        color= Color(0xFF886655))},
+                        color= Color(0xFF5D4037))},
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp, vertical = 4.dp)
+                        .clip(RoundedCornerShape(20.dp))
+                        .border(
+                            width = 2.dp,
+                            Color(0xFF886655),
+                            shape = RoundedCornerShape(20.dp))
+                        .background(Color(0xFFFFF3E0)),
                     selected = false,
                     onClick = {
                         val nombre = Uri.encode("Tiramisú Clásico")
@@ -173,6 +244,7 @@ fun DrawerMenu(
 
                     }, // fin OnClick
                     icon = { Icon(Icons.Filled.BakeryDining, contentDescription = "icono",
+                        tint = Color(0xFF5D4037),
                         modifier = Modifier.size(40.dp))}
                 )
             }
@@ -182,7 +254,16 @@ fun DrawerMenu(
                         fontSize = 25.sp,
                         fontFamily = FontFamily.Cursive,
                         fontWeight = FontWeight.Bold,
-                        color= Color(0xFF886655))},
+                        color= Color(0xFF5D4037))},
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp, vertical = 4.dp)
+                        .clip(RoundedCornerShape(20.dp))
+                        .border(
+                            width = 2.dp,
+                            Color(0xFF886655),
+                            shape = RoundedCornerShape(20.dp))
+                        .background(Color(0xFFFFF3E0)),
                     selected = false,
                     onClick = {
                         val nombre = Uri.encode("Torta de Naranja")
@@ -191,6 +272,7 @@ fun DrawerMenu(
 
                     }, // fin OnClick
                     icon = { Icon(Icons.Filled.Cake, contentDescription = "icono",
+                        tint = Color(0xFF5D4037),
                         modifier = Modifier.size(40.dp))}
                 )
             }
@@ -200,7 +282,16 @@ fun DrawerMenu(
                         fontSize = 25.sp,
                         fontFamily = FontFamily.Cursive,
                         fontWeight = FontWeight.Bold,
-                        color= Color(0xFF886655))},
+                        color= Color(0xFF5D4037))},
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp, vertical = 4.dp)
+                        .clip(RoundedCornerShape(20.dp))
+                        .border(
+                            width = 2.dp,
+                            Color(0xFF886655),
+                            shape = RoundedCornerShape(20.dp))
+                        .background(Color(0xFFFFF3E0)),
                     selected = false,
                     onClick = {
                         val nombre = Uri.encode("Cheesecake sin Azúcar")
@@ -209,6 +300,7 @@ fun DrawerMenu(
 
                     }, // fin OnClick
                     icon = { Icon(Icons.Filled.BrunchDining, contentDescription = "icono",
+                        tint = Color(0xFF5D4037),
                         modifier = Modifier.size(40.dp))}
                 )
             }
@@ -218,7 +310,16 @@ fun DrawerMenu(
                         fontSize = 25.sp,
                         fontFamily = FontFamily.Cursive,
                         fontWeight = FontWeight.Bold,
-                        color= Color(0xFF886655))},
+                        color= Color(0xFF5D4037))},
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp, vertical = 4.dp)
+                        .clip(RoundedCornerShape(20.dp))
+                        .border(
+                            width = 2.dp,
+                            Color(0xFF886655),
+                            shape = RoundedCornerShape(20.dp))
+                        .background(Color(0xFFFFF3E0)),
                     selected = false,
                     onClick = {
                         val nombre = Uri.encode("Empanada de Manzana")
@@ -227,6 +328,7 @@ fun DrawerMenu(
 
                     }, // fin OnClick
                     icon = { Icon(Icons.Filled.BakeryDining, contentDescription = "icono",
+                        tint = Color(0xFF5D4037),
                         modifier = Modifier.size(40.dp))}
                 )
             }
@@ -236,7 +338,16 @@ fun DrawerMenu(
                         fontSize = 25.sp,
                         fontFamily = FontFamily.Cursive,
                         fontWeight = FontWeight.Bold,
-                        color= Color(0xFF886655))},
+                        color= Color(0xFF5D4037))},
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp, vertical = 4.dp)
+                        .clip(RoundedCornerShape(20.dp))
+                        .border(
+                            width = 2.dp,
+                            Color(0xFF886655),
+                            shape = RoundedCornerShape(20.dp))
+                        .background(Color(0xFFFFF3E0)),
                     selected = false,
                     onClick = {
                         val nombre = Uri.encode("Pan sin Gluten")
@@ -245,6 +356,7 @@ fun DrawerMenu(
 
                     }, // fin OnClick
                     icon = { Icon(Icons.Filled.BrunchDining, contentDescription = "icono",
+                        tint = Color(0xFF5D4037),
                         modifier = Modifier.size(40.dp))}
                 )
             }
@@ -254,7 +366,16 @@ fun DrawerMenu(
                         fontSize = 25.sp,
                         fontFamily = FontFamily.Cursive,
                         fontWeight = FontWeight.Bold,
-                        color= Color(0xFF886655))},
+                        color= Color(0xFF5D4037))},
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp, vertical = 4.dp)
+                        .clip(RoundedCornerShape(20.dp))
+                        .border(
+                            width = 2.dp,
+                            Color(0xFF886655),
+                            shape = RoundedCornerShape(20.dp))
+                        .background(Color(0xFFFFF3E0)),
                     selected = false,
                     onClick = {
                         val nombre = Uri.encode("Tarta de Santiago")
@@ -263,6 +384,7 @@ fun DrawerMenu(
 
                     }, // fin OnClick
                     icon = { Icon(Icons.Filled.Cake, contentDescription = "icono",
+                        tint = Color(0xFF5D4037),
                         modifier = Modifier.size(40.dp))}
                 )
             }
@@ -272,7 +394,16 @@ fun DrawerMenu(
                         fontSize = 25.sp,
                         fontFamily = FontFamily.Cursive,
                         fontWeight = FontWeight.Bold,
-                        color= Color(0xFF886655))},
+                        color= Color(0xFF5D4037))},
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp, vertical = 4.dp)
+                        .clip(RoundedCornerShape(20.dp))
+                        .border(
+                            width = 2.dp,
+                            Color(0xFF886655),
+                            shape = RoundedCornerShape(20.dp))
+                        .background(Color(0xFFFFF3E0)),
                     selected = false,
                     onClick = {
                         val nombre = Uri.encode("Brownie sin Gluten")
@@ -281,6 +412,7 @@ fun DrawerMenu(
 
                     }, // fin OnClick
                     icon = { Icon(Icons.Filled.BakeryDining, contentDescription = "icono",
+                        tint = Color(0xFF5D4037),
                         modifier = Modifier.size(40.dp))}
                 )
             }
@@ -290,7 +422,16 @@ fun DrawerMenu(
                         fontSize = 25.sp,
                         fontFamily = FontFamily.Cursive,
                         fontWeight = FontWeight.Bold,
-                        color= Color(0xFF886655))},
+                        color= Color(0xFF5D4037))},
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp, vertical = 4.dp)
+                        .clip(RoundedCornerShape(20.dp))
+                        .border(
+                            width = 2.dp,
+                            Color(0xFF886655),
+                            shape = RoundedCornerShape(20.dp))
+                        .background(Color(0xFFFFF3E0)),
                     selected = false,
                     onClick = {
                         val nombre = Uri.encode("Torta Vegana de Chocolate")
@@ -299,6 +440,7 @@ fun DrawerMenu(
 
                     }, // fin OnClick
                     icon = { Icon(Icons.Filled.Cake, contentDescription = "icono",
+                        tint = Color(0xFF5D4037),
                         modifier = Modifier.size(40.dp))}
                 )
             }
@@ -308,7 +450,16 @@ fun DrawerMenu(
                         fontSize = 25.sp,
                         fontFamily = FontFamily.Cursive,
                         fontWeight = FontWeight.Bold,
-                        color= Color(0xFF886655))},
+                        color= Color(0xFF5D4037))},
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp, vertical = 4.dp)
+                        .clip(RoundedCornerShape(20.dp))
+                        .border(
+                            width = 2.dp,
+                            Color(0xFF886655),
+                            shape = RoundedCornerShape(20.dp))
+                        .background(Color(0xFFFFF3E0)),
                     selected = false,
                     onClick = {
                         val nombre = Uri.encode("Galletas Veganas de Avena")
@@ -317,6 +468,7 @@ fun DrawerMenu(
 
                     }, // fin OnClick
                     icon = { Icon(Icons.Filled.Cookie, contentDescription = "icono",
+                        tint = Color(0xFF5D4037),
                         modifier = Modifier.size(40.dp))}
                 )
             }
@@ -326,7 +478,16 @@ fun DrawerMenu(
                         fontSize = 25.sp,
                         fontFamily = FontFamily.Cursive,
                         fontWeight = FontWeight.Bold,
-                        color= Color(0xFF886655))},
+                        color= Color(0xFF5D4037))},
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp, vertical = 4.dp)
+                        .clip(RoundedCornerShape(20.dp))
+                        .border(
+                            width = 2.dp,
+                            Color(0xFF886655),
+                            shape = RoundedCornerShape(20.dp))
+                        .background(Color(0xFFFFF3E0)),
                     selected = false,
                     onClick = {
                         val nombre = Uri.encode("Torta Especial de Cumpleaños")
@@ -335,6 +496,7 @@ fun DrawerMenu(
 
                     }, // fin OnClick
                     icon = { Icon(Icons.Filled.Cake, contentDescription = "icono",
+                        tint = Color(0xFF5D4037),
                         modifier = Modifier.size(40.dp))}
                 )
             }
@@ -344,7 +506,16 @@ fun DrawerMenu(
                         fontSize = 25.sp,
                         fontFamily = FontFamily.Cursive,
                         fontWeight = FontWeight.Bold,
-                        color= Color(0xFF886655))},
+                        color= Color(0xFF5D4037))},
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp, vertical = 4.dp)
+                        .clip(RoundedCornerShape(20.dp))
+                        .border(
+                            width = 2.dp,
+                            Color(0xFF886655),
+                            shape = RoundedCornerShape(20.dp))
+                        .background(Color(0xFFFFF3E0)),
                     selected = false,
                     onClick = {
                         val nombre = Uri.encode("Torta Especial de Boda")
@@ -353,12 +524,17 @@ fun DrawerMenu(
 
                     }, // fin OnClick
                     icon = { Icon(Icons.Filled.Cake, contentDescription = "icono",
+                        tint = Color(0xFF5D4037),
                         modifier = Modifier.size(40.dp))}
                 )
             }
 
         } // fin LazyColumn
 
+        HorizontalDivider( //Dibujar Linea
+            color = Color(0xFF5D4037),
+            thickness = 1.dp
+        )
         // Footer
         Text(
             text = "@ 2025 Pastelería Mil Sabores.",
@@ -366,8 +542,11 @@ fun DrawerMenu(
             style = MaterialTheme.typography.headlineSmall,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(7.dp),
-            textAlign = TextAlign.Center
+                .background(Color(0xFFFFDFBF)),
+            textAlign = TextAlign.Center,
+            color = Color(0xFF5D4037),
+
+
         )
 
     } // fin columna
