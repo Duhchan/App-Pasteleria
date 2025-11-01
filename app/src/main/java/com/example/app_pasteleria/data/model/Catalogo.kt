@@ -13,4 +13,5 @@ data class Catalogo(
     val direccion : String,
     val conPapas : Boolean,
     val agrandarBebida : Boolean
+
 )
