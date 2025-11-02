@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -26,6 +27,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -44,6 +46,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.modifier.modifierLocalOf
 import androidx.compose.ui.res.painterResource
@@ -96,9 +99,8 @@ fun CatalogoFormScreen(
     }
 
     var cantidad by remember{ mutableStateOf(TextFieldValue("")) }
-    var direccion by remember{ mutableStateOf(TextFieldValue("")) }
-
-
+    var promocion by remember{mutableStateOf(TextFieldValue(""))}
+    var mostrarVentanaPromo by remember { mutableStateOf(false) }
 
 
     //Observar los datos en tiempo real
@@ -181,12 +183,12 @@ fun CatalogoFormScreen(
             ) // fin cantidad
 
             OutlinedTextField(
-                value=direccion,
-                onValueChange = {direccion = it},
+                value=promocion,
+                onValueChange = {promocion = it},
                 //OutlinedTextField es un componente de entrada de texto
                 // se utiliza para permitir que el usuario ingrese un valor.
 
-                label ={Text("Direccion")},
+                label ={Text("Codigo de Promocion")},
                 modifier = Modifier.padding(20.dp).fillMaxWidth()
             ) // fin direccion
 
@@ -194,10 +196,20 @@ fun CatalogoFormScreen(
 
             Button(
                 onClick = {
-
+                    var precioFinal: String
+                    if (promocion.text.trim().equals("FELICES50", ignoreCase = true)) {
+                        mostrarVentanaPromo = true
+                        val precioLimpio = precio.replace("$", "").replace(".", "")
+                        val precioNumerico = precioLimpio.toIntOrNull() ?: 0
+                        val precioConDescuento = precioNumerico / 2
+                        precioFinal = "$$precioConDescuento"
+                    } else {
+                        mostrarVentanaPromo = false
+                        precioFinal = precio
+                    }
                     val catalogo= Catalogo(
                         nombre= nombre,
-                        precio= precio,
+                        precio= precioFinal,
                         descripcion = descripcion,
                         imagen = imagen
                     )
@@ -206,10 +218,10 @@ fun CatalogoFormScreen(
 
                     //limpiar datos
                     cantidad = TextFieldValue("")
-                    direccion = TextFieldValue("")
+                    promocion = TextFieldValue("")
 
                 },
-                enabled=cantidad.text.isNotBlank() && direccion.text.isNotBlank()
+                enabled=cantidad.text.isNotBlank()
             ) // fin Button
             { // inicio texto
                 Text("Confirmar Pedido")
@@ -263,7 +275,45 @@ fun CatalogoFormScreen(
             // Footer
 
         } //Fin Contenido
-
+        if (mostrarVentanaPromo) {
+            AlertDialog(
+                onDismissRequest = { mostrarVentanaPromo = false },
+                containerColor = Color(0xFFFFF3E0),
+                shape = RoundedCornerShape(20.dp),
+                modifier = Modifier.border(
+                    width = 2.dp,
+                    color = Color(0xFF886655),
+                    shape = RoundedCornerShape(20.dp)),
+                title = {
+                    Text(
+                        text = "¡Promoción Activada!",
+                        fontFamily = FontFamily.Cursive,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 30.sp,
+                        color = Color(0xFF5D4037),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                },
+                text = {
+                    Text(
+                        text = "Tendrás un 50% de descuento en tu compra.",
+                        fontFamily = FontFamily.Serif,
+                        fontSize = 18.sp,
+                        color = Color(0xFF5D4037),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                },
+                confirmButton = {
+                    TextButton(
+                        onClick = { mostrarVentanaPromo = false },
+                    ) {
+                        Text("OK")
+                    }
+                }
+            )
+        }
     } // fin inner
 
 }//fin

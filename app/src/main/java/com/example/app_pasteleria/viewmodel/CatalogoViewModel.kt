@@ -17,6 +17,10 @@ class CatalogoViewModel(private val repository: CatalogoRepository) : ViewModel(
     private val _pasteles = MutableStateFlow<List<Catalogo>>(emptyList())
     val pasteles: StateFlow<List<Catalogo>> = _pasteles.asStateFlow()
 
+    private val _recordarEntrega = MutableStateFlow(false)
+    val recordarEntrega: StateFlow<Boolean> = _recordarEntrega.asStateFlow()
+
+
     init {
         viewModelScope.launch{
             repository.eliminarCatalogo()
@@ -30,7 +34,12 @@ class CatalogoViewModel(private val repository: CatalogoRepository) : ViewModel(
         }
     } // fin guardarProducto
 
-    // hacer el listado de productos(pasteles)
+    fun cambiarEstadoEntregado(){
+        viewModelScope.launch {
+            _recordarEntrega.value = true
+        }
+    }
+
     fun obtenerProductos(){
         viewModelScope.launch {
             repository.obtenerProductos().collect{ // se reciben datos del flow

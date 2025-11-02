@@ -4,8 +4,10 @@ import com.example.app_pasteleria.R
 import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -18,6 +20,7 @@ import androidx.compose.material.icons.filled.BakeryDining
 import androidx.compose.material.icons.filled.BrunchDining
 import androidx.compose.material.icons.filled.Cake
 import androidx.compose.material.icons.filled.Cookie
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.DrawerValue
@@ -30,11 +33,16 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.BottomStart
 import androidx.compose.ui.Modifier
@@ -48,37 +56,40 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.app_pasteleria.data.model.Catalogo
+import com.example.app_pasteleria.viewmodel.CatalogoViewModel
 import kotlinx.coroutines.launch
 
 @Composable
 
 fun DrawerMenu(
     correo: String,
-    navController: NavController
+    navController: NavController,
+    viewModel: CatalogoViewModel
 ){ //inicio
 
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
-    val snackbarHostState = remember { SnackbarHostState() }
+    var mostrarAlertaDuoc by remember { mutableStateOf(false) }
+    val regaloYaEntregado by viewModel.recordarEntrega.collectAsState()
 
     LaunchedEffect(Unit) {
-        if (correo.trim().endsWith("@duocuc.cl")) {
-            // Lanza el mensaje emergente
-            scope.launch {
-                snackbarHostState.showSnackbar(
-                    message = "Por ser estudiante de duoc, tendrás una torta de cumpleaños Gratis",
-                    duration = SnackbarDuration.Long
-                )
-            }
+        if (correo.trim().endsWith("@duocuc.cl") && !regaloYaEntregado) {
+            val tortaRegalo= Catalogo(
+                nombre = "Torta Especial de Cumpleaños",
+                precio = "$0 (Regalo Duoc)",
+                descripcion = "Torta de regalo por ser estudiante de Duoc UC",
+                imagen = R.drawable.tortacumpleanios
+            )
+            viewModel.guardarPastel(tortaRegalo)
+            viewModel.cambiarEstadoEntregado()
+            mostrarAlertaDuoc = true
         }
     }
 
     Scaffold(
-        // 3. ¡AQUÍ ESTÁ LA "PANTALLA" QUE FALTABA!
-        // Esto le dice a Compose DÓNDE dibujar el Snackbar
-        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
-
         topBar = {
             Box(
                 modifier = Modifier
@@ -751,7 +762,56 @@ fun DrawerMenu(
                     )
                 }
 
-            } // fin LazyColumn
+            }
+        if (mostrarAlertaDuoc) {
+            AlertDialog(
+                onDismissRequest = { mostrarAlertaDuoc = false },
+                containerColor = Color(0xFFFFF3E0),
+                shape = RoundedCornerShape(20.dp),
+                modifier = Modifier.border(
+                    width = 2.dp,
+                    color = Color(0xFF886655),
+                    shape = RoundedCornerShape(20.dp)
+                ),
+                title = {
+                    Text(
+                        text = "¡Bienvenido, Estudiante!",
+                        fontFamily = FontFamily.Cursive,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 30.sp,
+                        color = Color(0xFF5D4037),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                },
+                text = {
+                    Text(
+                        text = "Por ser estudiante de duoc, tendrás una torta de cumpleaños Gratis.",
+                        fontFamily = FontFamily.Serif,
+                        fontSize = 18.sp,
+                        color = Color(0xFF5D4037),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                },
+                confirmButton = {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        TextButton(
+                            onClick = { mostrarAlertaDuoc = false }
+                        ) {
+                            Text("¡Entendido!",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 16.sp,
+                                color = Color(0xFF79594F)
+                            )
+                        }
+                    }
+                }
+            )
+        }
     }
 
 

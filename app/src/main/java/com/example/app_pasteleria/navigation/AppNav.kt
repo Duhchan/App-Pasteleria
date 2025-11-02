@@ -38,7 +38,7 @@ fun AppNav(viewModel: CatalogoViewModel){
                 backStackEntry ->
             val obtenerCorreo = backStackEntry.arguments?.getString("correo") ?: ""
             val correo = Uri.decode(obtenerCorreo)
-            DrawerMenu(correo = correo, navController= navController)
+            DrawerMenu(correo = correo, navController= navController, viewModel = viewModel)
         }
 
         // ruta del Formulario: ProductoFormScreen
