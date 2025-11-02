@@ -1,6 +1,6 @@
 package com.example.app_pasteleria.view
 
-
+import com.example.app_pasteleria.R
 import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -19,12 +19,15 @@ import androidx.compose.material.icons.filled.BrunchDining
 import androidx.compose.material.icons.filled.Cake
 import androidx.compose.material.icons.filled.Cookie
 import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.BottomStart
 import androidx.compose.ui.Modifier
@@ -39,6 +42,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import kotlinx.coroutines.launch
 
 @Composable
 
@@ -46,6 +50,9 @@ fun DrawerMenu(
     username: String,
     navController: NavController
 ){ //inicio
+
+    val scope = rememberCoroutineScope()
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
 
     Column(modifier = Modifier.fillMaxSize())
     { // inicio columna
@@ -96,7 +103,8 @@ fun DrawerMenu(
                         val nombre = Uri.encode("Torta de Chocolate")
                         val precio = "45000"
                         navController.navigate("CatalogoFormScreen/$nombre/$precio")
-                    }, // fin OnClick
+                        scope.launch { drawerState.close() }
+                              }, // fin OnClick
                     icon = { Icon(Icons.Filled.Cake , contentDescription = "Icono Torta",
                         tint = Color(0xFF5D4037),
                         modifier = Modifier

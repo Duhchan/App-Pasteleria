@@ -64,7 +64,8 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended")
 
     // Dependencias Room
-    implementation("androidx.room:room-runtime:2.6.1")  // Versión actualizada
+    implementation("androidx.room:room-runtime:2.6.1")
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)  // Versión actualizada
     kapt("androidx.room:room-compiler:2.6.1")          // Misma versión
     implementation("androidx.room:room-ktx:2.6.1")     // Misma versión
 

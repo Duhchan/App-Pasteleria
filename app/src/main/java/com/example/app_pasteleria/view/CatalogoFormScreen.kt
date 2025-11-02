@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.app_pasteleria.R
 import com.example.app_pasteleria.data.model.Catalogo
 import com.example.app_pasteleria.viewmodel.CatalogoViewModel
 
@@ -46,8 +47,33 @@ import com.example.app_pasteleria.viewmodel.CatalogoViewModel
 fun CatalogoFormScreen(
     navController: NavController,
     nombre:String,
-    precio:String
+    precio:String,
+    descripcion:String,
+    imagen:Int=0,
+    viewModel: CatalogoViewModel
 ){// Inicio
+
+    fun obtenerImagenPastel(nombrePastel: String): Int {
+        return when (nombrePastel) {
+            "Torta de Chocolate" -> R.drawable.tortachocolate
+            "Torta de Frutas" -> R.drawable.tortafruta
+            "Torta de Vainilla" -> R.drawable.tortavainilla
+            "Torta de Manjar" -> R.drawable.tortacircularmanjar
+            "Mousse de Chocolate" -> R.drawable.postremoussechocolate
+            "Tiramisú Clásico" -> R.drawable.postretiramisu
+            "Torta de Naranja" -> R.drawable.tortanaranja
+            "Cheesecake sin Azúcar" -> R.drawable.cheesecake
+            "Empanada de Manzana" -> R.drawable.empanadamanzana
+            "Pan sin Gluten" -> R.drawable.pansingluten
+            "Tarta de Santiago" -> R.drawable.tartasantiago
+            "Brownie sin Gluten" -> R.drawable.brownie
+            "Torta Vegana de Chocolate" -> R.drawable.tortaceganachocolate
+            "Galletas Veganas de Avena" -> R.drawable.galletaavena
+            "Torta Especial de Cumpleaños" -> R.drawable.tortacumpleanios
+            "Torta Especial de Boda" -> R.drawable.tortaboda
+            else -> android.R.drawable.ic_menu_gallery
+        }
+    }
 
     var cantidad by remember{ mutableStateOf(TextFieldValue("")) }
     var direccion by remember{ mutableStateOf(TextFieldValue("")) }
@@ -55,8 +81,7 @@ fun CatalogoFormScreen(
     var conPapas  by remember{ mutableStateOf(false) }
     var agrandarBebida  by remember{ mutableStateOf(false) }
 
-    //conexion a viewmodel
-    val viewModel: CatalogoViewModel = viewModel ()
+
 
     //Observar los datos en tiempo real
 
@@ -83,7 +108,7 @@ fun CatalogoFormScreen(
         { // Inicio Contenido
 
             Image(
-                painter= painterResource(id= android.R.drawable.ic_menu_gallery),
+                painter= painterResource(id= obtenerImagenPastel(nombre)),
                 contentDescription = "Imagen Producto",
                 modifier=Modifier
                     .height(150.dp)
@@ -94,7 +119,7 @@ fun CatalogoFormScreen(
 
             Text(text=nombre, style= MaterialTheme.typography.headlineSmall)
             Text(text="Precio: $precio", style= MaterialTheme.typography.bodyLarge)
-
+            Text(text = descripcion)
             Spacer(modifier =Modifier.height(16.dp))
 
 
@@ -142,10 +167,8 @@ fun CatalogoFormScreen(
                     val catalogo= Catalogo(
                         nombre= nombre,
                         precio= precio,
-                        cantidad = cantidad.text,
-                        direccion= direccion.text,
-                        conPapas = conPapas,
-                        agrandarBebida=agrandarBebida
+                        descripcion = descripcion,
+                        imagen = imagen
                     )
                     //hace la magia
                     viewModel.guardarPastel(catalogo)
@@ -153,9 +176,6 @@ fun CatalogoFormScreen(
                     //limpiar datos
                     cantidad = TextFieldValue("")
                     direccion = TextFieldValue("")
-                    conPapas = false
-                    agrandarBebida = false
-
 
                 },
                 enabled=cantidad.text.isNotBlank() && direccion.text.isNotBlank()
@@ -184,13 +204,9 @@ fun CatalogoFormScreen(
                                 style= MaterialTheme.typography.bodyLarge
                             )//fin text 1
                             Text(
-                                text="Cantidad: ${catalogo.cantidad}",
-                                style = MaterialTheme.typography.bodyMedium
-                            )//fin text 2
-                            Text(
-                                text="Direccion: ${catalogo.direccion}",
+                                text="Descripcion: ${catalogo.descripcion}",
                                 style= MaterialTheme.typography.bodyMedium
-                            )//fin text 3
+                            )//fin text
 
                         }//fin del contenido
                     }// fin items
@@ -209,14 +225,3 @@ fun CatalogoFormScreen(
 
 }//fin
 
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewCatalogoFormScreen() {
-    // Preview básico para testing
-    CatalogoFormScreen(
-        navController = rememberNavController(),
-        nombre = "Producto Ejemplo",
-        precio = "$10.00"
-    )
-}

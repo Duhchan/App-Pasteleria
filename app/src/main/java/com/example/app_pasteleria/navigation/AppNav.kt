@@ -13,9 +13,10 @@ import com.example.app_pasteleria.ui.home.MuestraDatosScreen
 import com.example.app_pasteleria.ui.login.LoginScreen
 import com.example.app_pasteleria.view.DrawerMenu
 import com.example.app_pasteleria.view.CatalogoFormScreen
+import com.example.app_pasteleria.viewmodel.CatalogoViewModel
 
 @Composable
-fun AppNav(){
+fun AppNav(viewModel: CatalogoViewModel){
     //Crear el controlador
     val navController = rememberNavController()
     NavHost(navController= navController, startDestination = "login")
@@ -42,7 +43,7 @@ fun AppNav(){
         // ruta del Formulario: ProductoFormScreen
 
         composable(
-            route="ProductoFormScreen/{nombre}/{precio}",
+            route="CatalogoFormScreen/{nombre}/{precio}",
             arguments = listOf(
                 navArgument("nombre"){ type = NavType.StringType },
                 navArgument("precio"){ type = NavType.StringType }
@@ -53,8 +54,14 @@ fun AppNav(){
                 backStackEntry ->
             val nombre = Uri.decode(backStackEntry.arguments?.getString("nombre") ?:"")
             val precio = backStackEntry.arguments?.getString("precio") ?:""
-
-            CatalogoFormScreen(navController = navController, nombre= nombre, precio= precio)
+            val descripcion = backStackEntry.arguments?.getString("descripcion") ?:""
+            CatalogoFormScreen(
+                navController = navController,
+                nombre= nombre,
+                precio= precio,
+                descripcion = descripcion,
+                viewModel = viewModel
+            )
 
         }
 

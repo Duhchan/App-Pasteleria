@@ -11,15 +11,25 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import com.example.app_pasteleria.data.database.CatalogoDataBase
+import com.example.app_pasteleria.data.repository.CatalogoRepository
 import com.example.app_pasteleria.navigation.AppNav
 import com.example.app_pasteleria.ui.theme.AppPasteleriaTheme
+import com.example.app_pasteleria.viewmodel.CatalogoViewModel
+import com.example.app_pasteleria.viewmodel.CatalogoViewModelFactory
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val database = CatalogoDataBase.getDatabase(applicationContext)
+        val repository = CatalogoRepository(database.catalogoDao())
+        val factory = CatalogoViewModelFactory(repository)
+        val viewModel = ViewModelProvider(this, factory)[CatalogoViewModel::class.java]
 
         setContent {
-            AppNav()
+            AppNav(viewModel = viewModel)
         }
     }
 }
