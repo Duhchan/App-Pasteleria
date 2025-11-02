@@ -97,9 +97,6 @@ fun CatalogoFormScreen(
     var cantidad by remember{ mutableStateOf(TextFieldValue("")) }
     var direccion by remember{ mutableStateOf(TextFieldValue("")) }
 
-    var conPapas  by remember{ mutableStateOf(false) }
-    var agrandarBebida  by remember{ mutableStateOf(false) }
-
 
 
     //Observar los datos en tiempo real
@@ -119,8 +116,6 @@ fun CatalogoFormScreen(
             colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                 containerColor = Color(0xFF79594F)))
         }// fin bottom
-
-
 
     ) // fin Scaffold
 
