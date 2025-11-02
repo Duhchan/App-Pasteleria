@@ -98,10 +98,7 @@ fun CatalogoFormScreen(
     var cantidad by remember{ mutableStateOf(TextFieldValue("")) }
     var direccion by remember{ mutableStateOf(TextFieldValue("")) }
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 6134c5e2b48cc171aff82316a22ac109af0eee19
 
 
     //Observar los datos en tiempo real
