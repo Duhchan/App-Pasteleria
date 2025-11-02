@@ -14,4 +14,7 @@ interface CatalogoDao{
     @Query("SELECT * FROM catalogo")
     fun obtenerCatalogo(): Flow<List<Catalogo>>
 
+    @Query("DELETE FROM catalogo")
+    suspend fun eliminarCatalogo()
+
 }

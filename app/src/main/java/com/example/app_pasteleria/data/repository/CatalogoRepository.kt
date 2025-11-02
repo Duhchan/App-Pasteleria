@@ -13,4 +13,8 @@ class CatalogoRepository (private val catalogoDao: CatalogoDao) {
     fun obtenerProductos(): Flow<List<Catalogo>>{
         return catalogoDao.obtenerCatalogo()
     }
+
+    suspend fun eliminarCatalogo(){
+        catalogoDao.eliminarCatalogo()
+    }
 }

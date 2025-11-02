@@ -3,6 +3,7 @@ package com.example.app_pasteleria.view
 import android.provider.CalendarContract
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -97,8 +98,6 @@ fun CatalogoFormScreen(
     var cantidad by remember{ mutableStateOf(TextFieldValue("")) }
     var direccion by remember{ mutableStateOf(TextFieldValue("")) }
 
-    var conPapas  by remember{ mutableStateOf(false) }
-    var agrandarBebida  by remember{ mutableStateOf(false) }
 
 
 
@@ -174,10 +173,11 @@ fun CatalogoFormScreen(
 
             OutlinedTextField(
                 value=cantidad,
-                onValueChange = {cantidad = it},
-                //OutlinedTextField es un componente de entrada de texto
-                // se utiliza para permitir que el usuario ingrese un valor.
-
+                onValueChange = {
+                    if (it.text.isEmpty() || it.text.all { char -> char.isDigit() }) {
+                        cantidad = it
+                    }
+                },
                 label ={Text("Cantidad")},
                 modifier = Modifier.padding(20.dp).fillMaxWidth()
             ) // fin cantidad
@@ -234,17 +234,23 @@ fun CatalogoFormScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(4.dp)
+                                .clip(RoundedCornerShape(20.dp))
+                                .border(
+                                    width = 2.dp,
+                                    Color(0xFF886655),
+                                    shape = RoundedCornerShape(20.dp))
+                                .background(Color(0xFFFFF3E0))
+
                         )
                         {//inicio del contenido
 
                             Text(
                                 text="${catalogo.nombre} - ${catalogo.precio}",
-                                style= MaterialTheme.typography.bodyLarge
+                                style= MaterialTheme.typography.bodyLarge,
+                                color = Color(0xFF5D4037),
+                                modifier = Modifier
+                                    .align(Alignment.CenterHorizontally),
                             )//fin text 1
-                            Text(
-                                text="Descripcion: ${catalogo.descripcion}",
-                                style= MaterialTheme.typography.bodyMedium
-                            )//fin text
 
                         }//fin del contenido
                     }// fin items
