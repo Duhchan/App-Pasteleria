@@ -120,6 +120,8 @@ fun CatalogoFormScreen(
                 containerColor = Color(0xFF79594F)))
         }// fin bottom
 
+
+
     ) // fin Scaffold
 
     {// inicio inner
@@ -155,7 +157,7 @@ fun CatalogoFormScreen(
             )
 
 
-            Text(text="Precio: $$precio",
+            Text(text="Precio: $precio",
                 color = Color(0xFF5D4037),
                 fontFamily = FontFamily.Cursive,
                 fontWeight = FontWeight.Bold,
@@ -219,7 +221,12 @@ fun CatalogoFormScreen(
 
             //Mostrar los productos guardados
 
-            Text ("Pedidos Realizados: ", style = MaterialTheme.typography.headlineSmall)
+            Text ("Pedidos Realizados: ",
+                color = Color(0xFF5D4037),
+                fontFamily = FontFamily.Cursive,
+                fontWeight = FontWeight.Bold,
+                fontSize = 30.sp)
+
             if(pasteles.isNotEmpty()){
                 LazyColumn(modifier= Modifier.weight(1f)){
                     items(pasteles){ catalogo ->
@@ -249,6 +256,7 @@ fun CatalogoFormScreen(
                     style= MaterialTheme.typography.bodyMedium
                 )// fin text
             }//fin else
+            // Footer
 
         } //Fin Contenido
 

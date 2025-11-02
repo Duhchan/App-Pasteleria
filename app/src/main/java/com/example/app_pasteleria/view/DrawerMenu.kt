@@ -101,7 +101,7 @@ fun DrawerMenu(
                     selected = false,
                     onClick = {
                         val nombre = Uri.encode("Torta de Chocolate")
-                        val precio = "45000"
+                        val precio = "$45000"
                         val descripcion = Uri.encode("Torta de Chocolate con relleno de chocolate")
                         navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
                         scope.launch { drawerState.close() }
