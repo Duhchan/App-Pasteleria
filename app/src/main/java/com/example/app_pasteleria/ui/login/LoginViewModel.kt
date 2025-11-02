@@ -33,5 +33,8 @@ class LoginViewModel(
         if (oK) onSucces (uiState.correo.trim())
         else uiState = uiState.copy(error = "Credenciales Inválidas")
 
+
+
     }
+
 }//  fin viewModel
