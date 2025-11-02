@@ -1,5 +1,6 @@
 package com.example.app_pasteleria.ui.login
 
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -209,8 +210,9 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(50.dp))
 
                 Button(onClick = {/* accion futura*/
-                    vm.submit { user ->
-                        navController.navigate("DrawerMenu/user")
+                    vm.submit { correo ->
+                        val Email = Uri.encode(correo)
+                        navController.navigate("DrawerMenu/$Email")
                         //Navegar a una pantalla pasando el parametro
                         {//inicio navegar
                             popUpTo("login") { inclusive = true }
@@ -222,11 +224,9 @@ fun LoginScreen(
 
                     }//fin submit
                 },
-                    enabled =  !state.isLoading,
+                    enabled = !state.isLoading,
                     modifier = Modifier.fillMaxWidth(0.6f)
-
-
-                )//fin button
+                ) //fin button
 
                 {
                     //Text("Presioname")
@@ -235,8 +235,9 @@ fun LoginScreen(
                 } // fin boton
 
                 Button(onClick = {/* accion futura*/
-                    vm.submit { user ->
-                        navController.navigate("DrawerMenu/user")
+                    vm.submit { correo ->
+                        val Email = Uri.encode(correo)
+                        navController.navigate("DrawerMenu/$Email")
                         //Navegar a una pantalla pasando el parametro
                         {//inicio navegar
                             popUpTo("login") { inclusive = true }
@@ -269,17 +270,4 @@ fun LoginScreen(
 }// Fin HomeScreen
 
 
-@Preview(showBackground = true) // Genera la vista
-@Composable  // Genera Interfz Garfica
 
-fun LoginScreenPreview(){
-    // Crear un navController de manera ficticia para fines de la vista previa
-    val navController = rememberNavController()
-
-    // Puedes usar un ViewModel simulado aquí si no tienes acceso a uno real
-    val vm = LoginViewModel() // Suponiendo que LoginViewModel está correctamente configurado para la vista previa
-
-    LoginScreen(navController = navController, vm = vm)
-
-
-}// Fin LoginScreen

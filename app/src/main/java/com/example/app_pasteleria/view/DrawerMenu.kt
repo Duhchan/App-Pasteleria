@@ -18,15 +18,22 @@ import androidx.compose.material.icons.filled.BakeryDining
 import androidx.compose.material.icons.filled.BrunchDining
 import androidx.compose.material.icons.filled.Cake
 import androidx.compose.material.icons.filled.Cookie
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.BottomStart
@@ -47,539 +54,707 @@ import kotlinx.coroutines.launch
 @Composable
 
 fun DrawerMenu(
-    username: String,
+    correo: String,
     navController: NavController
 ){ //inicio
 
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
+    val snackbarHostState = remember { SnackbarHostState() }
 
-    Column(modifier = Modifier.fillMaxSize())
-    { // inicio columna
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(90.dp) // dp: densidad de pixeles
-                .background(Color(0xFF79594F))
-        ) // fin box
-        { // inicio contenido
-            Text(
-                text = "Catalogo Pasteles",
-                fontFamily = FontFamily.Cursive,
-                fontSize = 40.sp,
-                style = MaterialTheme.typography.headlineSmall,
-                color = Color(0xFFFFF3E0),
-                fontWeight = FontWeight.Bold,
+    LaunchedEffect(Unit) {
+        if (correo.trim().endsWith("@duocuc.cl")) {
+            // Lanza el mensaje emergente
+            scope.launch {
+                snackbarHostState.showSnackbar(
+                    message = "Por ser estudiante de duoc, tendrás una torta de cumpleaños Gratis",
+                    duration = SnackbarDuration.Long
+                )
+            }
+        }
+    }
+
+    Scaffold(
+        // 3. ¡AQUÍ ESTÁ LA "PANTALLA" QUE FALTABA!
+        // Esto le dice a Compose DÓNDE dibujar el Snackbar
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
+
+        topBar = {
+            Box(
                 modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(10.dp)
-            )
-        } // fin contenido
-        // LazyColumn: crear lista de elementos que se pueden desplazar verticalmente
-
-        LazyColumn(
-            modifier = Modifier
-                .weight(1f)
-                .background(Color(0xFFFFDFBF))){
-            item { //torta chocolate
-                NavigationDrawerItem(
-                    label = { Text("Torta de Chocolate",
-                        fontSize = 25.sp,
-                        fontFamily = FontFamily.Cursive,
-                        fontWeight = FontWeight.Bold,
-                        color= Color(0xFF5D4037)
-                    )},
+                    .fillMaxWidth()
+                    .height(90.dp)
+                    .background(Color(0xFF79594F))
+            ) {
+                Text(
+                    text = "Catalogo Pasteles",
+                    fontFamily = FontFamily.Cursive,
+                    fontSize = 40.sp,
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = Color(0xFFFFF3E0),
+                    fontWeight = FontWeight.Bold,
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 12.dp, vertical = 4.dp)
-                        .clip(RoundedCornerShape(20.dp))
-                        .border(
-                            width = 2.dp,
-                            Color(0xFF886655),
-                            shape = RoundedCornerShape(20.dp))
-                        .background(Color(0xFFFFF3E0)),
-                    selected = false,
-                    onClick = {
-                        val nombre = Uri.encode("Torta de Chocolate")
-                        val precio = "$45000"
-                        val descripcion = Uri.encode("Torta de Chocolate con relleno de chocolate")
-                        navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
-                        scope.launch { drawerState.close() }
-                              }, // fin OnClick
-                    icon = { Icon(Icons.Filled.Cake , contentDescription = "Icono Torta",
-                        tint = Color(0xFF5D4037),
+                        .align(Alignment.BottomCenter)
+                        .padding(10.dp)
+                )
+            }
+        },
+        bottomBar = {
+            BottomAppBar(
+                containerColor = Color(0xFFFFDFBF) // El color de fondo de tu footer
+            ) {
+                Text(
+                    text = "@ 2025 Pastelería Mil Sabores.",
+                    fontSize = 20.sp,
+                    style = MaterialTheme.typography.headlineSmall,
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center,
+                    color = Color(0xFF5D4037),
+                )
+            }
+        }
+
+    )
+    { innerPadding ->
+
+
+            // LazyColumn: crear lista de elementos que se pueden desplazar verticalmente
+
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .background(Color(0xFFFFDFBF))
+            ) {
+                item { //torta chocolate
+                    NavigationDrawerItem(
+                        label = {
+                            Text(
+                                "Torta de Chocolate",
+                                fontSize = 25.sp,
+                                fontFamily = FontFamily.Cursive,
+                                fontWeight = FontWeight.Bold,
+                                color = Color(0xFF5D4037)
+                            )
+                        },
                         modifier = Modifier
-                                .size(40.dp))}
-                )
-            } // fin item 1
+                            .fillMaxWidth()
+                            .padding(horizontal = 12.dp, vertical = 4.dp)
+                            .clip(RoundedCornerShape(20.dp))
+                            .border(
+                                width = 2.dp,
+                                Color(0xFF886655),
+                                shape = RoundedCornerShape(20.dp)
+                            )
+                            .background(Color(0xFFFFF3E0)),
+                        selected = false,
+                        onClick = {
+                            val nombre = Uri.encode("Torta de Chocolate")
+                            val precio = "$45000"
+                            val descripcion =
+                                Uri.encode("Torta de Chocolate con relleno de chocolate")
+                            navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
+                            scope.launch { drawerState.close() }
+                        }, // fin OnClick
+                        icon = {
+                            Icon(
+                                Icons.Filled.Cake, contentDescription = "Icono Torta",
+                                tint = Color(0xFF5D4037),
+                                modifier = Modifier
+                                    .size(40.dp)
+                            )
+                        }
+                    )
+                } // fin item 1
 
-            item { // torta de frutas
-                NavigationDrawerItem(
-                    label = { Text("Torta de Frutas",
-                        fontSize = 25.sp,
-                        fontFamily = FontFamily.Cursive,
-                        fontWeight = FontWeight.Bold,
-                        color= Color(0xFF5D4037))},
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 12.dp, vertical = 4.dp)
-                        .clip(RoundedCornerShape(20.dp))
-                        .border(
-                            width = 2.dp,
-                            Color(0xFF886655),
-                            shape = RoundedCornerShape(20.dp))
-                        .background(Color(0xFFFFF3E0)),
-                    selected = false,
-                    onClick = {
-                        val nombre = Uri.encode("Torta de Frutas")
-                        val precio = "$50.000"
-                        val descripcion = Uri.encode("Torta de Frutas con relleno de frutas")
-                        navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
+                item { // torta de frutas
+                    NavigationDrawerItem(
+                        label = {
+                            Text(
+                                "Torta de Frutas",
+                                fontSize = 25.sp,
+                                fontFamily = FontFamily.Cursive,
+                                fontWeight = FontWeight.Bold,
+                                color = Color(0xFF5D4037)
+                            )
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 12.dp, vertical = 4.dp)
+                            .clip(RoundedCornerShape(20.dp))
+                            .border(
+                                width = 2.dp,
+                                Color(0xFF886655),
+                                shape = RoundedCornerShape(20.dp)
+                            )
+                            .background(Color(0xFFFFF3E0)),
+                        selected = false,
+                        onClick = {
+                            val nombre = Uri.encode("Torta de Frutas")
+                            val precio = "$50.000"
+                            val descripcion = Uri.encode("Torta de Frutas con relleno de frutas")
+                            navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
 
-                    }, // fin OnClick
-                    icon = { Icon(Icons.Filled.Cake , contentDescription = "Icono Torta",
-                        tint = Color(0xFF5D4037),
-                        modifier = Modifier.size(40.dp))}
-                )
-            } // fin item 2
+                        }, // fin OnClick
+                        icon = {
+                            Icon(
+                                Icons.Filled.Cake, contentDescription = "Icono Torta",
+                                tint = Color(0xFF5D4037),
+                                modifier = Modifier.size(40.dp)
+                            )
+                        }
+                    )
+                } // fin item 2
 
-            item { // Torta de Vainilla
-                NavigationDrawerItem(
-                    label = { Text("Torta de Vainilla",
-                        fontSize = 25.sp,
-                        fontFamily = FontFamily.Cursive,
-                        fontWeight = FontWeight.Bold,
-                        color= Color(0xFF5D4037))},
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 12.dp, vertical = 4.dp)
-                        .clip(RoundedCornerShape(20.dp))
-                        .border(
-                            width = 2.dp,
-                            Color(0xFF886655),
-                            shape = RoundedCornerShape(20.dp))
-                        .background(Color(0xFFFFF3E0)),
-                    selected = false,
-                    onClick = {
-                        val nombre = Uri.encode("Torta de Vainilla")
-                        val precio = "$40.000"
-                        val descripcion = Uri.encode("Torta de Vainilla con relleno de vainilla")
-                        navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
+                item { // Torta de Vainilla
+                    NavigationDrawerItem(
+                        label = {
+                            Text(
+                                "Torta de Vainilla",
+                                fontSize = 25.sp,
+                                fontFamily = FontFamily.Cursive,
+                                fontWeight = FontWeight.Bold,
+                                color = Color(0xFF5D4037)
+                            )
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 12.dp, vertical = 4.dp)
+                            .clip(RoundedCornerShape(20.dp))
+                            .border(
+                                width = 2.dp,
+                                Color(0xFF886655),
+                                shape = RoundedCornerShape(20.dp)
+                            )
+                            .background(Color(0xFFFFF3E0)),
+                        selected = false,
+                        onClick = {
+                            val nombre = Uri.encode("Torta de Vainilla")
+                            val precio = "$40.000"
+                            val descripcion =
+                                Uri.encode("Torta de Vainilla con relleno de vainilla")
+                            navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
 
-                    }, // fin OnClick
-                    icon = { Icon(Icons.Filled.Cake , contentDescription = "Icono Torta",
-                        tint = Color(0xFF5D4037),
-                        modifier = Modifier.size(40.dp))}
-                )
-            } // fin item 3
+                        }, // fin OnClick
+                        icon = {
+                            Icon(
+                                Icons.Filled.Cake, contentDescription = "Icono Torta",
+                                tint = Color(0xFF5D4037),
+                                modifier = Modifier.size(40.dp)
+                            )
+                        }
+                    )
+                } // fin item 3
 
-            item { // Torta de Manjar
-                NavigationDrawerItem(
-                    label = { Text("Torta de Manjar",
-                        fontSize = 25.sp,
-                        fontFamily = FontFamily.Cursive,
-                        fontWeight = FontWeight.Bold,
-                        color= Color(0xFF5D4037))},
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 12.dp, vertical = 4.dp)
-                        .clip(RoundedCornerShape(20.dp))
-                        .border(
-                            width = 2.dp,
-                            Color(0xFF886655),
-                            shape = RoundedCornerShape(20.dp))
-                        .background(Color(0xFFFFF3E0)),
-                    selected = false,
-                    onClick = {
+                item { // Torta de Manjar
+                    NavigationDrawerItem(
+                        label = {
+                            Text(
+                                "Torta de Manjar",
+                                fontSize = 25.sp,
+                                fontFamily = FontFamily.Cursive,
+                                fontWeight = FontWeight.Bold,
+                                color = Color(0xFF5D4037)
+                            )
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 12.dp, vertical = 4.dp)
+                            .clip(RoundedCornerShape(20.dp))
+                            .border(
+                                width = 2.dp,
+                                Color(0xFF886655),
+                                shape = RoundedCornerShape(20.dp)
+                            )
+                            .background(Color(0xFFFFF3E0)),
+                        selected = false,
+                        onClick = {
 
-                        val nombre = Uri.encode("Torta de Manjar")
-                        val precio = "$42.000"
-                        val descripcion = Uri.encode("Torta de Manjar con relleno de manjar")
-                        navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
+                            val nombre = Uri.encode("Torta de Manjar")
+                            val precio = "$42.000"
+                            val descripcion = Uri.encode("Torta de Manjar con relleno de manjar")
+                            navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
 
-                    }, // fin OnClick
-                    icon = { Icon(Icons.Filled.Cake , contentDescription = "Icono Torta",
-                        tint = Color(0xFF5D4037),
-                        modifier = Modifier.size(40.dp))}
-                )
-            } // fin item 4
+                        }, // fin OnClick
+                        icon = {
+                            Icon(
+                                Icons.Filled.Cake, contentDescription = "Icono Torta",
+                                tint = Color(0xFF5D4037),
+                                modifier = Modifier.size(40.dp)
+                            )
+                        }
+                    )
+                } // fin item 4
 
-            item { // Mousse de chocolata
-                NavigationDrawerItem(
-                    label = { Text("Mousse de Chocolate" ,
-                        fontSize = 25.sp,
-                        fontFamily = FontFamily.Cursive,
-                        fontWeight = FontWeight.Bold,
-                        color= Color(0xFF5D4037))},
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 12.dp, vertical = 4.dp)
-                        .clip(RoundedCornerShape(20.dp))
-                        .border(
-                            width = 2.dp,
-                            Color(0xFF886655),
-                            shape = RoundedCornerShape(20.dp))
-                        .background(Color(0xFFFFF3E0)),
-                    selected = false,
-                    onClick = {
-                        val nombre = Uri.encode("Mousse de Chocolate")
-                        val precio = "$5.000"
-                        val descripcion = Uri.encode("Mousse de Chocolate con relleno de chocolate")
-                        navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
+                item { // Mousse de chocolata
+                    NavigationDrawerItem(
+                        label = {
+                            Text(
+                                "Mousse de Chocolate",
+                                fontSize = 25.sp,
+                                fontFamily = FontFamily.Cursive,
+                                fontWeight = FontWeight.Bold,
+                                color = Color(0xFF5D4037)
+                            )
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 12.dp, vertical = 4.dp)
+                            .clip(RoundedCornerShape(20.dp))
+                            .border(
+                                width = 2.dp,
+                                Color(0xFF886655),
+                                shape = RoundedCornerShape(20.dp)
+                            )
+                            .background(Color(0xFFFFF3E0)),
+                        selected = false,
+                        onClick = {
+                            val nombre = Uri.encode("Mousse de Chocolate")
+                            val precio = "$5.000"
+                            val descripcion =
+                                Uri.encode("Mousse de Chocolate con relleno de chocolate")
+                            navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
 
-                    }, // fin OnClick
-                    icon = { Icon(Icons.Filled.BakeryDining , contentDescription = "Icono Torta",
-                        tint = Color(0xFF5D4037),
-                        modifier = Modifier.size(40.dp))}
-                )
-            } // fin item 5
-            item { // Tiramisú Clásico
-                NavigationDrawerItem(
-                    label = { Text("Tiramisú Clásico",
-                        fontSize = 25.sp,
-                        fontFamily = FontFamily.Cursive,
-                        fontWeight = FontWeight.Bold,
-                        color= Color(0xFF5D4037))},
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 12.dp, vertical = 4.dp)
-                        .clip(RoundedCornerShape(20.dp))
-                        .border(
-                            width = 2.dp,
-                            Color(0xFF886655),
-                            shape = RoundedCornerShape(20.dp))
-                        .background(Color(0xFFFFF3E0)),
-                    selected = false,
-                    onClick = {
-                        val nombre = Uri.encode("Tiramisú Clásico")
-                        val precio = "$5.500"
-                        val descripcion = Uri.encode("Tiramisú Clásico con relleno de crema")
-                        navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
+                        }, // fin OnClick
+                        icon = {
+                            Icon(
+                                Icons.Filled.BakeryDining, contentDescription = "Icono Torta",
+                                tint = Color(0xFF5D4037),
+                                modifier = Modifier.size(40.dp)
+                            )
+                        }
+                    )
+                } // fin item 5
+                item { // Tiramisú Clásico
+                    NavigationDrawerItem(
+                        label = {
+                            Text(
+                                "Tiramisú Clásico",
+                                fontSize = 25.sp,
+                                fontFamily = FontFamily.Cursive,
+                                fontWeight = FontWeight.Bold,
+                                color = Color(0xFF5D4037)
+                            )
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 12.dp, vertical = 4.dp)
+                            .clip(RoundedCornerShape(20.dp))
+                            .border(
+                                width = 2.dp,
+                                Color(0xFF886655),
+                                shape = RoundedCornerShape(20.dp)
+                            )
+                            .background(Color(0xFFFFF3E0)),
+                        selected = false,
+                        onClick = {
+                            val nombre = Uri.encode("Tiramisú Clásico")
+                            val precio = "$5.500"
+                            val descripcion = Uri.encode("Tiramisú Clásico con relleno de crema")
+                            navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
 
-                    }, // fin OnClick
-                    icon = { Icon(Icons.Filled.BakeryDining, contentDescription = "icono",
-                        tint = Color(0xFF5D4037),
-                        modifier = Modifier.size(40.dp))}
-                )
-            }
-            item { // Torta de Naranja
-                NavigationDrawerItem(
-                    label = { Text("Torta de Naranja",
-                        fontSize = 25.sp,
-                        fontFamily = FontFamily.Cursive,
-                        fontWeight = FontWeight.Bold,
-                        color= Color(0xFF5D4037))},
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 12.dp, vertical = 4.dp)
-                        .clip(RoundedCornerShape(20.dp))
-                        .border(
-                            width = 2.dp,
-                            Color(0xFF886655),
-                            shape = RoundedCornerShape(20.dp))
-                        .background(Color(0xFFFFF3E0)),
-                    selected = false,
-                    onClick = {
-                        val nombre = Uri.encode("Torta de Naranja")
-                        val precio = "$48.000"
-                        val descripcion = Uri.encode("Torta de Naranja con relleno de naranja")
-                        navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
+                        }, // fin OnClick
+                        icon = {
+                            Icon(
+                                Icons.Filled.BakeryDining, contentDescription = "icono",
+                                tint = Color(0xFF5D4037),
+                                modifier = Modifier.size(40.dp)
+                            )
+                        }
+                    )
+                }
+                item { // Torta de Naranja
+                    NavigationDrawerItem(
+                        label = {
+                            Text(
+                                "Torta de Naranja",
+                                fontSize = 25.sp,
+                                fontFamily = FontFamily.Cursive,
+                                fontWeight = FontWeight.Bold,
+                                color = Color(0xFF5D4037)
+                            )
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 12.dp, vertical = 4.dp)
+                            .clip(RoundedCornerShape(20.dp))
+                            .border(
+                                width = 2.dp,
+                                Color(0xFF886655),
+                                shape = RoundedCornerShape(20.dp)
+                            )
+                            .background(Color(0xFFFFF3E0)),
+                        selected = false,
+                        onClick = {
+                            val nombre = Uri.encode("Torta de Naranja")
+                            val precio = "$48.000"
+                            val descripcion = Uri.encode("Torta de Naranja con relleno de naranja")
+                            navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
 
-                    }, // fin OnClick
-                    icon = { Icon(Icons.Filled.Cake, contentDescription = "icono",
-                        tint = Color(0xFF5D4037),
-                        modifier = Modifier.size(40.dp))}
-                )
-            }
-            item { // Cheesecake sin Azúcar
-                NavigationDrawerItem(
-                    label = { Text("Cheesecake sin Azúcar",
-                        fontSize = 25.sp,
-                        fontFamily = FontFamily.Cursive,
-                        fontWeight = FontWeight.Bold,
-                        color= Color(0xFF5D4037))},
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 12.dp, vertical = 4.dp)
-                        .clip(RoundedCornerShape(20.dp))
-                        .border(
-                            width = 2.dp,
-                            Color(0xFF886655),
-                            shape = RoundedCornerShape(20.dp))
-                        .background(Color(0xFFFFF3E0)),
-                    selected = false,
-                    onClick = {
-                        val nombre = Uri.encode("Cheesecake sin Azúcar")
-                        val precio = "$47.000"
-                        val descripcion = Uri.encode("Cheesecake sin Azúcar con relleno de crema")
-                        navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
+                        }, // fin OnClick
+                        icon = {
+                            Icon(
+                                Icons.Filled.Cake, contentDescription = "icono",
+                                tint = Color(0xFF5D4037),
+                                modifier = Modifier.size(40.dp)
+                            )
+                        }
+                    )
+                }
+                item { // Cheesecake sin Azúcar
+                    NavigationDrawerItem(
+                        label = {
+                            Text(
+                                "Cheesecake sin Azúcar",
+                                fontSize = 25.sp,
+                                fontFamily = FontFamily.Cursive,
+                                fontWeight = FontWeight.Bold,
+                                color = Color(0xFF5D4037)
+                            )
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 12.dp, vertical = 4.dp)
+                            .clip(RoundedCornerShape(20.dp))
+                            .border(
+                                width = 2.dp,
+                                Color(0xFF886655),
+                                shape = RoundedCornerShape(20.dp)
+                            )
+                            .background(Color(0xFFFFF3E0)),
+                        selected = false,
+                        onClick = {
+                            val nombre = Uri.encode("Cheesecake sin Azúcar")
+                            val precio = "$47.000"
+                            val descripcion =
+                                Uri.encode("Cheesecake sin Azúcar con relleno de crema")
+                            navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
 
-                    }, // fin OnClick
-                    icon = { Icon(Icons.Filled.BrunchDining, contentDescription = "icono",
-                        tint = Color(0xFF5D4037),
-                        modifier = Modifier.size(40.dp))}
-                )
-            }
-            item { //Empanada de Manzana
-                NavigationDrawerItem(
-                    label = { Text("Empanada de Manzana",
-                        fontSize = 25.sp,
-                        fontFamily = FontFamily.Cursive,
-                        fontWeight = FontWeight.Bold,
-                        color= Color(0xFF5D4037))},
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 12.dp, vertical = 4.dp)
-                        .clip(RoundedCornerShape(20.dp))
-                        .border(
-                            width = 2.dp,
-                            Color(0xFF886655),
-                            shape = RoundedCornerShape(20.dp))
-                        .background(Color(0xFFFFF3E0)),
-                    selected = false,
-                    onClick = {
-                        val nombre = Uri.encode("Empanada de Manzana")
-                        val precio = "$3.000"
-                        val descripcion = Uri.encode("Empanada de Manzana con relleno de manzana")
-                        navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
+                        }, // fin OnClick
+                        icon = {
+                            Icon(
+                                Icons.Filled.BrunchDining, contentDescription = "icono",
+                                tint = Color(0xFF5D4037),
+                                modifier = Modifier.size(40.dp)
+                            )
+                        }
+                    )
+                }
+                item { //Empanada de Manzana
+                    NavigationDrawerItem(
+                        label = {
+                            Text(
+                                "Empanada de Manzana",
+                                fontSize = 25.sp,
+                                fontFamily = FontFamily.Cursive,
+                                fontWeight = FontWeight.Bold,
+                                color = Color(0xFF5D4037)
+                            )
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 12.dp, vertical = 4.dp)
+                            .clip(RoundedCornerShape(20.dp))
+                            .border(
+                                width = 2.dp,
+                                Color(0xFF886655),
+                                shape = RoundedCornerShape(20.dp)
+                            )
+                            .background(Color(0xFFFFF3E0)),
+                        selected = false,
+                        onClick = {
+                            val nombre = Uri.encode("Empanada de Manzana")
+                            val precio = "$3.000"
+                            val descripcion =
+                                Uri.encode("Empanada de Manzana con relleno de manzana")
+                            navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
 
-                    }, // fin OnClick
-                    icon = { Icon(Icons.Filled.BakeryDining, contentDescription = "icono",
-                        tint = Color(0xFF5D4037),
-                        modifier = Modifier.size(40.dp))}
-                )
-            }
-            item { // Pan sin Gluten
-                NavigationDrawerItem(
-                    label = { Text("Pan sin Gluten",
-                        fontSize = 25.sp,
-                        fontFamily = FontFamily.Cursive,
-                        fontWeight = FontWeight.Bold,
-                        color= Color(0xFF5D4037))},
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 12.dp, vertical = 4.dp)
-                        .clip(RoundedCornerShape(20.dp))
-                        .border(
-                            width = 2.dp,
-                            Color(0xFF886655),
-                            shape = RoundedCornerShape(20.dp))
-                        .background(Color(0xFFFFF3E0)),
-                    selected = false,
-                    onClick = {
-                        val nombre = Uri.encode("Pan sin Gluten")
-                        val precio = "$3.500"
-                        val descripcion = Uri.encode("Pan sin Gluten, una opción más sana y saludable")
-                        navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
+                        }, // fin OnClick
+                        icon = {
+                            Icon(
+                                Icons.Filled.BakeryDining, contentDescription = "icono",
+                                tint = Color(0xFF5D4037),
+                                modifier = Modifier.size(40.dp)
+                            )
+                        }
+                    )
+                }
+                item { // Pan sin Gluten
+                    NavigationDrawerItem(
+                        label = {
+                            Text(
+                                "Pan sin Gluten",
+                                fontSize = 25.sp,
+                                fontFamily = FontFamily.Cursive,
+                                fontWeight = FontWeight.Bold,
+                                color = Color(0xFF5D4037)
+                            )
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 12.dp, vertical = 4.dp)
+                            .clip(RoundedCornerShape(20.dp))
+                            .border(
+                                width = 2.dp,
+                                Color(0xFF886655),
+                                shape = RoundedCornerShape(20.dp)
+                            )
+                            .background(Color(0xFFFFF3E0)),
+                        selected = false,
+                        onClick = {
+                            val nombre = Uri.encode("Pan sin Gluten")
+                            val precio = "$3.500"
+                            val descripcion =
+                                Uri.encode("Pan sin Gluten, una opción más sana y saludable")
+                            navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
 
-                    }, // fin OnClick
-                    icon = { Icon(Icons.Filled.BrunchDining, contentDescription = "icono",
-                        tint = Color(0xFF5D4037),
-                        modifier = Modifier.size(40.dp))}
-                )
-            }
-            item { // Tarta de Santiago
-                NavigationDrawerItem(
-                    label = { Text("Tarta de Santiago",
-                        fontSize = 25.sp,
-                        fontFamily = FontFamily.Cursive,
-                        fontWeight = FontWeight.Bold,
-                        color= Color(0xFF5D4037))},
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 12.dp, vertical = 4.dp)
-                        .clip(RoundedCornerShape(20.dp))
-                        .border(
-                            width = 2.dp,
-                            Color(0xFF886655),
-                            shape = RoundedCornerShape(20.dp))
-                        .background(Color(0xFFFFF3E0)),
-                    selected = false,
-                    onClick = {
-                        val nombre = Uri.encode("Tarta de Santiago")
-                        val precio = "$6.000"
-                        val descripcion = Uri.encode("Tarta de Santiago con relleno de chocolate")
-                        navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
+                        }, // fin OnClick
+                        icon = {
+                            Icon(
+                                Icons.Filled.BrunchDining, contentDescription = "icono",
+                                tint = Color(0xFF5D4037),
+                                modifier = Modifier.size(40.dp)
+                            )
+                        }
+                    )
+                }
+                item { // Tarta de Santiago
+                    NavigationDrawerItem(
+                        label = {
+                            Text(
+                                "Tarta de Santiago",
+                                fontSize = 25.sp,
+                                fontFamily = FontFamily.Cursive,
+                                fontWeight = FontWeight.Bold,
+                                color = Color(0xFF5D4037)
+                            )
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 12.dp, vertical = 4.dp)
+                            .clip(RoundedCornerShape(20.dp))
+                            .border(
+                                width = 2.dp,
+                                Color(0xFF886655),
+                                shape = RoundedCornerShape(20.dp)
+                            )
+                            .background(Color(0xFFFFF3E0)),
+                        selected = false,
+                        onClick = {
+                            val nombre = Uri.encode("Tarta de Santiago")
+                            val precio = "$6.000"
+                            val descripcion =
+                                Uri.encode("Tarta de Santiago con relleno de chocolate")
+                            navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
 
-                    }, // fin OnClick
-                    icon = { Icon(Icons.Filled.Cake, contentDescription = "icono",
-                        tint = Color(0xFF5D4037),
-                        modifier = Modifier.size(40.dp))}
-                )
-            }
-            item { // Brownie sin Gluten
-                NavigationDrawerItem(
-                    label = { Text("Brownie sin Gluten",
-                        fontSize = 25.sp,
-                        fontFamily = FontFamily.Cursive,
-                        fontWeight = FontWeight.Bold,
-                        color= Color(0xFF5D4037))},
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 12.dp, vertical = 4.dp)
-                        .clip(RoundedCornerShape(20.dp))
-                        .border(
-                            width = 2.dp,
-                            Color(0xFF886655),
-                            shape = RoundedCornerShape(20.dp))
-                        .background(Color(0xFFFFF3E0)),
-                    selected = false,
-                    onClick = {
-                        val nombre = Uri.encode("Brownie sin Gluten")
-                        val precio = "$4.000"
-                        val descripcion = Uri.encode("Brownie sin Gluten sin relleno")
-                        navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
+                        }, // fin OnClick
+                        icon = {
+                            Icon(
+                                Icons.Filled.Cake, contentDescription = "icono",
+                                tint = Color(0xFF5D4037),
+                                modifier = Modifier.size(40.dp)
+                            )
+                        }
+                    )
+                }
+                item { // Brownie sin Gluten
+                    NavigationDrawerItem(
+                        label = {
+                            Text(
+                                "Brownie sin Gluten",
+                                fontSize = 25.sp,
+                                fontFamily = FontFamily.Cursive,
+                                fontWeight = FontWeight.Bold,
+                                color = Color(0xFF5D4037)
+                            )
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 12.dp, vertical = 4.dp)
+                            .clip(RoundedCornerShape(20.dp))
+                            .border(
+                                width = 2.dp,
+                                Color(0xFF886655),
+                                shape = RoundedCornerShape(20.dp)
+                            )
+                            .background(Color(0xFFFFF3E0)),
+                        selected = false,
+                        onClick = {
+                            val nombre = Uri.encode("Brownie sin Gluten")
+                            val precio = "$4.000"
+                            val descripcion = Uri.encode("Brownie sin Gluten sin relleno")
+                            navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
 
-                    }, // fin OnClick
-                    icon = { Icon(Icons.Filled.BakeryDining, contentDescription = "icono",
-                        tint = Color(0xFF5D4037),
-                        modifier = Modifier.size(40.dp))}
-                )
-            }
-            item { // Torta Vegana de Chocolate
-                NavigationDrawerItem(
-                    label = { Text("Torta Vegana de Chocolate",
-                        fontSize = 25.sp,
-                        fontFamily = FontFamily.Cursive,
-                        fontWeight = FontWeight.Bold,
-                        color= Color(0xFF5D4037))},
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 12.dp, vertical = 4.dp)
-                        .clip(RoundedCornerShape(20.dp))
-                        .border(
-                            width = 2.dp,
-                            Color(0xFF886655),
-                            shape = RoundedCornerShape(20.dp))
-                        .background(Color(0xFFFFF3E0)),
-                    selected = false,
-                    onClick = {
-                        val nombre = Uri.encode("Torta Vegana de Chocolate")
-                        val precio = "$50.000"
-                        val descripcion = Uri.encode("Torta Vegana de Chocolate con relleno de chocolate")
-                        navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
+                        }, // fin OnClick
+                        icon = {
+                            Icon(
+                                Icons.Filled.BakeryDining, contentDescription = "icono",
+                                tint = Color(0xFF5D4037),
+                                modifier = Modifier.size(40.dp)
+                            )
+                        }
+                    )
+                }
+                item { // Torta Vegana de Chocolate
+                    NavigationDrawerItem(
+                        label = {
+                            Text(
+                                "Torta Vegana de Chocolate",
+                                fontSize = 25.sp,
+                                fontFamily = FontFamily.Cursive,
+                                fontWeight = FontWeight.Bold,
+                                color = Color(0xFF5D4037)
+                            )
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 12.dp, vertical = 4.dp)
+                            .clip(RoundedCornerShape(20.dp))
+                            .border(
+                                width = 2.dp,
+                                Color(0xFF886655),
+                                shape = RoundedCornerShape(20.dp)
+                            )
+                            .background(Color(0xFFFFF3E0)),
+                        selected = false,
+                        onClick = {
+                            val nombre = Uri.encode("Torta Vegana de Chocolate")
+                            val precio = "$50.000"
+                            val descripcion =
+                                Uri.encode("Torta Vegana de Chocolate con relleno de chocolate")
+                            navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
 
-                    }, // fin OnClick
-                    icon = { Icon(Icons.Filled.Cake, contentDescription = "icono",
-                        tint = Color(0xFF5D4037),
-                        modifier = Modifier.size(40.dp))}
-                )
-            }
-            item { // Galletas Veganas de Avena
-                NavigationDrawerItem(
-                    label = { Text("Galletas Veganas de Avena",
-                        fontSize = 25.sp,
-                        fontFamily = FontFamily.Cursive,
-                        fontWeight = FontWeight.Bold,
-                        color= Color(0xFF5D4037))},
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 12.dp, vertical = 4.dp)
-                        .clip(RoundedCornerShape(20.dp))
-                        .border(
-                            width = 2.dp,
-                            Color(0xFF886655),
-                            shape = RoundedCornerShape(20.dp))
-                        .background(Color(0xFFFFF3E0)),
-                    selected = false,
-                    onClick = {
-                        val nombre = Uri.encode("Galletas Veganas de Avena")
-                        val precio = "$4.500"
-                        val descripcion = Uri.encode("Galletas Veganas de Avena sin relleno")
-                        navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
+                        }, // fin OnClick
+                        icon = {
+                            Icon(
+                                Icons.Filled.Cake, contentDescription = "icono",
+                                tint = Color(0xFF5D4037),
+                                modifier = Modifier.size(40.dp)
+                            )
+                        }
+                    )
+                }
+                item { // Galletas Veganas de Avena
+                    NavigationDrawerItem(
+                        label = {
+                            Text(
+                                "Galletas Veganas de Avena",
+                                fontSize = 25.sp,
+                                fontFamily = FontFamily.Cursive,
+                                fontWeight = FontWeight.Bold,
+                                color = Color(0xFF5D4037)
+                            )
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 12.dp, vertical = 4.dp)
+                            .clip(RoundedCornerShape(20.dp))
+                            .border(
+                                width = 2.dp,
+                                Color(0xFF886655),
+                                shape = RoundedCornerShape(20.dp)
+                            )
+                            .background(Color(0xFFFFF3E0)),
+                        selected = false,
+                        onClick = {
+                            val nombre = Uri.encode("Galletas Veganas de Avena")
+                            val precio = "$4.500"
+                            val descripcion = Uri.encode("Galletas Veganas de Avena sin relleno")
+                            navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
 
-                    }, // fin OnClick
-                    icon = { Icon(Icons.Filled.Cookie, contentDescription = "icono",
-                        tint = Color(0xFF5D4037),
-                        modifier = Modifier.size(40.dp))}
-                )
-            }
-            item { // Torta Especial de Cumpleaños
-                NavigationDrawerItem(
-                    label = { Text("Torta Especial de Cumpleaños",
-                        fontSize = 25.sp,
-                        fontFamily = FontFamily.Cursive,
-                        fontWeight = FontWeight.Bold,
-                        color= Color(0xFF5D4037))},
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 12.dp, vertical = 4.dp)
-                        .clip(RoundedCornerShape(20.dp))
-                        .border(
-                            width = 2.dp,
-                            Color(0xFF886655),
-                            shape = RoundedCornerShape(20.dp))
-                        .background(Color(0xFFFFF3E0)),
-                    selected = false,
-                    onClick = {
-                        val nombre = Uri.encode("Torta Especial de Cumpleaños")
-                        val precio = "$55.000"
-                        val descripcion = Uri.encode("Torta Especial de Cumpleaños con relleno de chocolate")
-                        navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
+                        }, // fin OnClick
+                        icon = {
+                            Icon(
+                                Icons.Filled.Cookie, contentDescription = "icono",
+                                tint = Color(0xFF5D4037),
+                                modifier = Modifier.size(40.dp)
+                            )
+                        }
+                    )
+                }
+                item { // Torta Especial de Cumpleaños
+                    NavigationDrawerItem(
+                        label = {
+                            Text(
+                                "Torta Especial de Cumpleaños",
+                                fontSize = 25.sp,
+                                fontFamily = FontFamily.Cursive,
+                                fontWeight = FontWeight.Bold,
+                                color = Color(0xFF5D4037)
+                            )
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 12.dp, vertical = 4.dp)
+                            .clip(RoundedCornerShape(20.dp))
+                            .border(
+                                width = 2.dp,
+                                Color(0xFF886655),
+                                shape = RoundedCornerShape(20.dp)
+                            )
+                            .background(Color(0xFFFFF3E0)),
+                        selected = false,
+                        onClick = {
+                            val nombre = Uri.encode("Torta Especial de Cumpleaños")
+                            val precio = "$55.000"
+                            val descripcion =
+                                Uri.encode("Torta Especial de Cumpleaños con relleno de chocolate")
+                            navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
 
-                    }, // fin OnClick
-                    icon = { Icon(Icons.Filled.Cake, contentDescription = "icono",
-                        tint = Color(0xFF5D4037),
-                        modifier = Modifier.size(40.dp))}
-                )
-            }
-            item { // Torta Especial de Boda
-                NavigationDrawerItem(
-                    label = { Text("Torta Especial de Boda",
-                        fontSize = 25.sp,
-                        fontFamily = FontFamily.Cursive,
-                        fontWeight = FontWeight.Bold,
-                        color= Color(0xFF5D4037))},
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 12.dp, vertical = 4.dp)
-                        .clip(RoundedCornerShape(20.dp))
-                        .border(
-                            width = 2.dp,
-                            Color(0xFF886655),
-                            shape = RoundedCornerShape(20.dp))
-                        .background(Color(0xFFFFF3E0)),
-                    selected = false,
-                    onClick = {
-                        val nombre = Uri.encode("Torta Especial de Boda")
-                        val precio = "$60.000"
-                        val descripcion = Uri.encode("Torta Especial de Boda con relleno variado")
-                        navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
+                        }, // fin OnClick
+                        icon = {
+                            Icon(
+                                Icons.Filled.Cake, contentDescription = "icono",
+                                tint = Color(0xFF5D4037),
+                                modifier = Modifier.size(40.dp)
+                            )
+                        }
+                    )
+                }
+                item { // Torta Especial de Boda
+                    NavigationDrawerItem(
+                        label = {
+                            Text(
+                                "Torta Especial de Boda",
+                                fontSize = 25.sp,
+                                fontFamily = FontFamily.Cursive,
+                                fontWeight = FontWeight.Bold,
+                                color = Color(0xFF5D4037)
+                            )
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 12.dp, vertical = 4.dp)
+                            .clip(RoundedCornerShape(20.dp))
+                            .border(
+                                width = 2.dp,
+                                Color(0xFF886655),
+                                shape = RoundedCornerShape(20.dp)
+                            )
+                            .background(Color(0xFFFFF3E0)),
+                        selected = false,
+                        onClick = {
+                            val nombre = Uri.encode("Torta Especial de Boda")
+                            val precio = "$60.000"
+                            val descripcion =
+                                Uri.encode("Torta Especial de Boda con relleno variado")
+                            navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
 
-                    }, // fin OnClick
-                    icon = { Icon(Icons.Filled.Cake, contentDescription = "icono",
-                        tint = Color(0xFF5D4037),
-                        modifier = Modifier.size(40.dp))}
-                )
-            }
+                        }, // fin OnClick
+                        icon = {
+                            Icon(
+                                Icons.Filled.Cake, contentDescription = "icono",
+                                tint = Color(0xFF5D4037),
+                                modifier = Modifier.size(40.dp)
+                            )
+                        }
+                    )
+                }
 
-        } // fin LazyColumn
-
-        HorizontalDivider( //Dibujar Linea
-            color = Color(0xFF5D4037),
-            thickness = 1.dp
-        )
-        // Footer
-        Text(
-            text = "@ 2025 Pastelería Mil Sabores.",
-            fontSize = 20.sp,
-            style = MaterialTheme.typography.headlineSmall,
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color(0xFFFFDFBF)),
-            textAlign = TextAlign.Center,
-            color = Color(0xFF5D4037),
+            } // fin LazyColumn
+    }
 
 
-        )
-
-    } // fin columna
 } // fin DrawerMenu
 
 
-@Preview(showBackground = true)
-@Composable
-fun DrawerMenuPreview(){
-    val navController = androidx.navigation.compose.rememberNavController()
-    DrawerMenu(username = "Usuario Prueba", navController = navController)
-}

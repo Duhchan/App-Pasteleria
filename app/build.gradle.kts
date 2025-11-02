@@ -65,7 +65,8 @@ dependencies {
 
     // Dependencias Room
     implementation("androidx.room:room-runtime:2.6.1")
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)  // Versión actualizada
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.material3)  // Versión actualizada
     kapt("androidx.room:room-compiler:2.6.1")          // Misma versión
     implementation("androidx.room:room-ktx:2.6.1")     // Misma versión
 

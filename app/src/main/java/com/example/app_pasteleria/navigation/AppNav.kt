@@ -27,17 +27,18 @@ fun AppNav(viewModel: CatalogoViewModel){
         }    //composable
 
         composable(
-            route="DrawerMenu/{username}",
+            route="DrawerMenu/{correo}",
             arguments = listOf(
-                navArgument("username"){
+                navArgument("correo"){
                     type = NavType.StringType
                 }
             )//fin lisof
         )// fin composable
         {//inicio
                 backStackEntry ->
-            val username = backStackEntry.arguments?.getString("username").orEmpty()
-            DrawerMenu(username= username, navController= navController)
+            val obtenerCorreo = backStackEntry.arguments?.getString("correo") ?: ""
+            val correo = Uri.decode(obtenerCorreo)
+            DrawerMenu(correo = correo, navController= navController)
         }
 
         // ruta del Formulario: ProductoFormScreen
