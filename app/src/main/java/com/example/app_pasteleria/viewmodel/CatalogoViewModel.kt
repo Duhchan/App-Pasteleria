@@ -17,7 +17,13 @@ class CatalogoViewModel(private val repository: CatalogoRepository) : ViewModel(
     private val _pasteles = MutableStateFlow<List<Catalogo>>(emptyList())
     val pasteles: StateFlow<List<Catalogo>> = _pasteles.asStateFlow()
 
-    init { obtenerProductos() }
+    init {
+        viewModelScope.launch{
+            repository.eliminarCatalogo()
+            obtenerProductos()
+        }
+
+        }
     fun guardarPastel(pastel: Catalogo){
         viewModelScope.launch {
             repository.insertarCatalogo(pastel)
