@@ -102,7 +102,8 @@ fun DrawerMenu(
                     onClick = {
                         val nombre = Uri.encode("Torta de Chocolate")
                         val precio = "45000"
-                        navController.navigate("CatalogoFormScreen/$nombre/$precio")
+                        val descripcion = Uri.encode("Torta de Chocolate con relleno de chocolate")
+                        navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
                         scope.launch { drawerState.close() }
                               }, // fin OnClick
                     icon = { Icon(Icons.Filled.Cake , contentDescription = "Icono Torta",
@@ -132,7 +133,8 @@ fun DrawerMenu(
                     onClick = {
                         val nombre = Uri.encode("Torta de Frutas")
                         val precio = "$50.000"
-                        navController.navigate("CatalogoFormScreen/$nombre/$precio")
+                        val descripcion = Uri.encode("Torta de Frutas con relleno de frutas")
+                        navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
 
                     }, // fin OnClick
                     icon = { Icon(Icons.Filled.Cake , contentDescription = "Icono Torta",
@@ -161,7 +163,8 @@ fun DrawerMenu(
                     onClick = {
                         val nombre = Uri.encode("Torta de Vainilla")
                         val precio = "$40.000"
-                        navController.navigate("CatalogoFormScreen/$nombre/$precio")
+                        val descripcion = Uri.encode("Torta de Vainilla con relleno de vainilla")
+                        navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
 
                     }, // fin OnClick
                     icon = { Icon(Icons.Filled.Cake , contentDescription = "Icono Torta",
@@ -191,7 +194,8 @@ fun DrawerMenu(
 
                         val nombre = Uri.encode("Torta de Manjar")
                         val precio = "$42.000"
-                        navController.navigate("CatalogoFormScreen/$nombre/$precio")
+                        val descripcion = Uri.encode("Torta de Manjar con relleno de manjar")
+                        navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
 
                     }, // fin OnClick
                     icon = { Icon(Icons.Filled.Cake , contentDescription = "Icono Torta",
@@ -220,7 +224,8 @@ fun DrawerMenu(
                     onClick = {
                         val nombre = Uri.encode("Mousse de Chocolate")
                         val precio = "$5.000"
-                        navController.navigate("CatalogoFormScreen/$nombre/$precio")
+                        val descripcion = Uri.encode("Mousse de Chocolate con relleno de chocolate")
+                        navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
 
                     }, // fin OnClick
                     icon = { Icon(Icons.Filled.BakeryDining , contentDescription = "Icono Torta",
@@ -248,7 +253,8 @@ fun DrawerMenu(
                     onClick = {
                         val nombre = Uri.encode("Tiramisú Clásico")
                         val precio = "$5.500"
-                        navController.navigate("CatalogoFormScreen/$nombre/$precio")
+                        val descripcion = Uri.encode("Tiramisú Clásico con relleno de crema")
+                        navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
 
                     }, // fin OnClick
                     icon = { Icon(Icons.Filled.BakeryDining, contentDescription = "icono",
@@ -276,7 +282,8 @@ fun DrawerMenu(
                     onClick = {
                         val nombre = Uri.encode("Torta de Naranja")
                         val precio = "$48.000"
-                        navController.navigate("CatalogoFormScreen/$nombre/$precio")
+                        val descripcion = Uri.encode("Torta de Naranja con relleno de naranja")
+                        navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
 
                     }, // fin OnClick
                     icon = { Icon(Icons.Filled.Cake, contentDescription = "icono",
@@ -304,7 +311,8 @@ fun DrawerMenu(
                     onClick = {
                         val nombre = Uri.encode("Cheesecake sin Azúcar")
                         val precio = "$47.000"
-                        navController.navigate("CatalogoFormScreen/$nombre/$precio")
+                        val descripcion = Uri.encode("Cheesecake sin Azúcar con relleno de crema")
+                        navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
 
                     }, // fin OnClick
                     icon = { Icon(Icons.Filled.BrunchDining, contentDescription = "icono",
@@ -332,7 +340,8 @@ fun DrawerMenu(
                     onClick = {
                         val nombre = Uri.encode("Empanada de Manzana")
                         val precio = "$3.000"
-                        navController.navigate("CatalogoFormScreen/$nombre/$precio")
+                        val descripcion = Uri.encode("Empanada de Manzana con relleno de manzana")
+                        navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
 
                     }, // fin OnClick
                     icon = { Icon(Icons.Filled.BakeryDining, contentDescription = "icono",
@@ -360,7 +369,8 @@ fun DrawerMenu(
                     onClick = {
                         val nombre = Uri.encode("Pan sin Gluten")
                         val precio = "$3.500"
-                        navController.navigate("CatalogoFormScreen/$nombre/$precio")
+                        val descripcion = Uri.encode("Pan sin Gluten, una opción más sana y saludable")
+                        navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
 
                     }, // fin OnClick
                     icon = { Icon(Icons.Filled.BrunchDining, contentDescription = "icono",
@@ -388,7 +398,8 @@ fun DrawerMenu(
                     onClick = {
                         val nombre = Uri.encode("Tarta de Santiago")
                         val precio = "$6.000"
-                        navController.navigate("CatalogoFormScreen/$nombre/$precio")
+                        val descripcion = Uri.encode("Tarta de Santiago con relleno de chocolate")
+                        navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
 
                     }, // fin OnClick
                     icon = { Icon(Icons.Filled.Cake, contentDescription = "icono",
@@ -416,7 +427,8 @@ fun DrawerMenu(
                     onClick = {
                         val nombre = Uri.encode("Brownie sin Gluten")
                         val precio = "$4.000"
-                        navController.navigate("CatalogoFormScreen/$nombre/$precio")
+                        val descripcion = Uri.encode("Brownie sin Gluten sin relleno")
+                        navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
 
                     }, // fin OnClick
                     icon = { Icon(Icons.Filled.BakeryDining, contentDescription = "icono",
@@ -444,7 +456,8 @@ fun DrawerMenu(
                     onClick = {
                         val nombre = Uri.encode("Torta Vegana de Chocolate")
                         val precio = "$50.000"
-                        navController.navigate("CatalogoFormScreen/$nombre/$precio")
+                        val descripcion = Uri.encode("Torta Vegana de Chocolate con relleno de chocolate")
+                        navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
 
                     }, // fin OnClick
                     icon = { Icon(Icons.Filled.Cake, contentDescription = "icono",
@@ -472,7 +485,8 @@ fun DrawerMenu(
                     onClick = {
                         val nombre = Uri.encode("Galletas Veganas de Avena")
                         val precio = "$4.500"
-                        navController.navigate("CatalogoFormScreen/$nombre/$precio")
+                        val descripcion = Uri.encode("Galletas Veganas de Avena sin relleno")
+                        navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
 
                     }, // fin OnClick
                     icon = { Icon(Icons.Filled.Cookie, contentDescription = "icono",
@@ -500,7 +514,8 @@ fun DrawerMenu(
                     onClick = {
                         val nombre = Uri.encode("Torta Especial de Cumpleaños")
                         val precio = "$55.000"
-                        navController.navigate("CatalogoFormScreen/$nombre/$precio")
+                        val descripcion = Uri.encode("Torta Especial de Cumpleaños con relleno de chocolate")
+                        navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
 
                     }, // fin OnClick
                     icon = { Icon(Icons.Filled.Cake, contentDescription = "icono",
@@ -528,7 +543,8 @@ fun DrawerMenu(
                     onClick = {
                         val nombre = Uri.encode("Torta Especial de Boda")
                         val precio = "$60.000"
-                        navController.navigate("CatalogoFormScreen/$nombre/$precio")
+                        val descripcion = Uri.encode("Torta Especial de Boda con relleno variado")
+                        navController.navigate("CatalogoFormScreen/$nombre/$precio/$descripcion")
 
                     }, // fin OnClick
                     icon = { Icon(Icons.Filled.Cake, contentDescription = "icono",

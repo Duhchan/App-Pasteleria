@@ -43,10 +43,11 @@ fun AppNav(viewModel: CatalogoViewModel){
         // ruta del Formulario: ProductoFormScreen
 
         composable(
-            route="CatalogoFormScreen/{nombre}/{precio}",
+            route="CatalogoFormScreen/{nombre}/{precio}/{descripcion}",
             arguments = listOf(
                 navArgument("nombre"){ type = NavType.StringType },
-                navArgument("precio"){ type = NavType.StringType }
+                navArgument("precio"){ type = NavType.StringType },
+                navArgument("descripcion"){ type = NavType.StringType }
             )//fin lisof
         ) // fin composable
 
