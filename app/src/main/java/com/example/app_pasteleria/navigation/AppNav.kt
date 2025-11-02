@@ -1,8 +1,10 @@
 package com.example.app_pasteleria.navigation
 
 
+import RegistroScreen
 import android.net.Uri
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -11,6 +13,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.app_pasteleria.ui.home.MuestraDatosScreen
 import com.example.app_pasteleria.ui.login.LoginScreen
+import com.example.app_pasteleria.ui.registro.RegistroViewModel
 import com.example.app_pasteleria.view.DrawerMenu
 import com.example.app_pasteleria.view.CatalogoFormScreen
 import com.example.app_pasteleria.viewmodel.CatalogoViewModel
@@ -24,7 +27,16 @@ fun AppNav(viewModel: CatalogoViewModel){
         composable("login"){
             LoginScreen(navController = navController)
 
-        }    //composable
+        }
+        composable("registro"){
+
+            val registroViewModel: RegistroViewModel = viewModel()
+
+            RegistroScreen(
+                navController = navController,
+                vm = registroViewModel
+            )
+        }//composable
 
         composable(
             route="DrawerMenu/{correo}",

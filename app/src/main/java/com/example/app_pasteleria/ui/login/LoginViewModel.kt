@@ -12,7 +12,7 @@ class LoginViewModel(
 
 ): ViewModel(){
     var uiState by mutableStateOf(LoginUiState())
-    fun onUsernameChange(value:String){
+    fun onCorreoChange(value:String){
         uiState = uiState.copy(correo =value, error= null )
         //la funcion copy es la que lleva el contenido hacia atras
     }//fin nameChange

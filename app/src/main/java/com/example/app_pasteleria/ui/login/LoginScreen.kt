@@ -156,7 +156,7 @@ fun LoginScreen(
 
                 OutlinedTextField(
                     value = state.correo,
-                    onValueChange = vm::onUsernameChange,
+                    onValueChange = vm::onCorreoChange,
                     label ={Text("Correo",
                         color = ColorScheme.onSurface)},
                     singleLine = true ,
@@ -234,30 +234,18 @@ fun LoginScreen(
 
                 } // fin boton
 
-                Button(onClick = {/* accion futura*/
-                    vm.submit { correo ->
-                        val Email = Uri.encode(correo)
-                        navController.navigate("DrawerMenu/$Email")
-                        //Navegar a una pantalla pasando el parametro
-                        {//inicio navegar
-                            popUpTo("login") { inclusive = true }
-                            //No puede volver al login con back
 
-                            //Evite crear una nueva instancia o el misma pagina
-                            launchSingleTop = true
-                        }//termino navegar
-
-                    }//fin submit
-                },
-                    enabled =  !state.isLoading,
+                Button(
+                    onClick = {
+                        // La única acción es navegar a la pantalla de registro
+                        navController.navigate("registro")
+                        // (Asegúrate que "register_screen" sea la ruta que definiste en AppNav.kt)
+                    },
                     modifier = Modifier.fillMaxWidth(0.6f)
-
-
-                )//fin button
-
+                ) //fin button
                 {
-                    //Text("Presioname")
-                    Text (if(state.isLoading)"Validando" else "Registrarse")
+                    // El texto del botón es simple
+                    Text("Registrarse")
 
                 } // fin boton
 
