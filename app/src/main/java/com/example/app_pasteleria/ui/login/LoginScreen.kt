@@ -90,7 +90,7 @@ fun LoginScreen(
         ) // fin Scaff
         {// Inicio Inner
                 innerPadding ->
-            // Representa el espacio interno para que no choque con el topBar
+
 
             Column (  //   Colaca los elementos de la Ui
                 modifier = Modifier
@@ -237,14 +237,14 @@ fun LoginScreen(
 
                 Button(
                     onClick = {
-                        // La única acción es navegar a la pantalla de registro
+
                         navController.navigate("registro")
-                        // (Asegúrate que "register_screen" sea la ruta que definiste en AppNav.kt)
+
                     },
                     modifier = Modifier.fillMaxWidth(0.6f)
                 ) //fin button
                 {
-                    // El texto del botón es simple
+
                     Text("Registrarse")
 
                 } // fin boton

@@ -124,7 +124,6 @@ fun CatalogoFormScreen(
 
 
 
-    //Observar los datos en tiempo real
 
     val pasteles: List<Catalogo> by viewModel.pasteles.collectAsState()
 
@@ -206,8 +205,7 @@ fun CatalogoFormScreen(
             OutlinedTextField(
                 value=promocion,
                 onValueChange = {promocion = it},
-                //OutlinedTextField es un componente de entrada de texto
-                // se utiliza para permitir que el usuario ingrese un valor.
+
 
                 label ={Text("Codigo de Promocion")},
                 trailingIcon = {
@@ -256,9 +254,7 @@ fun CatalogoFormScreen(
 
                 enabled=cantidad.text.isNotBlank(),
                 colors = ButtonDefaults.buttonColors(
-                    // Usa el mismo color café de tu TopAppBar
                     containerColor = Color(0xFF79594F),
-                    // Define el color del texto como blanco
                     contentColor = Color.White
                 )
 

@@ -123,7 +123,7 @@ fun DrawerMenu(
         },
         bottomBar = {
             BottomAppBar(
-                containerColor = Color(0xFFFFDFBF) // El color de fondo de tu footer
+                containerColor = Color(0xFFFFDFBF)
             ) {
                 Text(
                     text = "@ 2025 Pastelería Mil Sabores.",

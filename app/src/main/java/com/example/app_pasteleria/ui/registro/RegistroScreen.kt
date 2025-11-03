@@ -93,7 +93,7 @@ fun RegistroScreen(
                     .background(Color(0xFFFFDFBF)), // gris Claro
                 verticalArrangement = Arrangement.spacedBy(10.dp),
                 horizontalAlignment = Alignment.CenterHorizontally  // Centra horizontalmente
-                //Define  que elementos dentro la columna estaran separados por 10.dp
+
             )// fin column
             {// inicio Contenido
                 Text(
@@ -156,8 +156,8 @@ fun RegistroScreen(
                     },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(0.95f),
-                    colors = TextFieldDefaults.colors(  //Colores para los Form
-                        focusedContainerColor = Color.Gray, //Casilla de Borde
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = Color.Gray,
                         unfocusedContainerColor = Color.White
                     ) //Casilla de Fondo
                 )//fin de lined text field para usuario
@@ -216,7 +216,7 @@ fun RegistroScreen(
                 )
                 {
                     Text(
-                        "Confirmar Contraseña", // <-- CAMBIO
+                        "Confirmar Contraseña",
                         style = MaterialTheme.typography.bodyLarge.copy(
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.9f),
                             fontWeight = FontWeight.Bold
