@@ -77,7 +77,7 @@ dependencies {
     //implementation(libs.androidx.compose.runtime.livedata)
     // OR Option 2: Direct notation
     implementation("androidx.compose.runtime:runtime-livedata:1.5.4")
-
+    implementation("com.google.accompanist:accompanist-permissions:0.34.0")
 
 // CameraX
     val camerax_version = "1.3.3"

@@ -13,6 +13,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.example.app_pasteleria.viewmodel.QrViewModel
 import com.example.app_pasteleria.utils.QrScanner
 
@@ -22,9 +24,10 @@ import com.example.app_pasteleria.utils.QrScanner
 fun QrScannerScreen(
     viewModel: QrViewModel,
     hasCameraPermission: Boolean,
-    onRequestPermission: () -> Unit
+    onRequestPermission: () -> Unit,
+    navController: NavController
 ) {
-    val qrResult by viewModel.qrResult.observeAsState()
+
     val context = LocalContext.current
     var isScanning by remember { mutableStateOf(true) }
 
@@ -52,7 +55,7 @@ fun QrScannerScreen(
             ) {
                 Text("Conceder permiso de cámara")
             }
-        } else if (qrResult == null && isScanning) {
+        } else if (isScanning) {
             Text(
                 "Escanea un código QR",
                 style = MaterialTheme.typography.titleLarge,
@@ -66,16 +69,17 @@ fun QrScannerScreen(
                     .height(400.dp)
             ) {
                 QrScanner(
+                    navController = navController,
                     onQrCodeScanned = { qrContent ->
-                        // Procesar el QR detectado
-                        viewModel.onQrDetected(qrContent)
-                        isScanning = false
-                        Toast.makeText(context, "QR detectado!", Toast.LENGTH_SHORT).show()
+                        navController.previousBackStackEntry
+                            ?.savedStateHandle
+                            ?.set("qr_result", qrContent)
+                        navController.popBackStack()
                     },
-                    modifier = Modifier.fillMaxSize()
-                )
+                    modifier = Modifier
+                        .fillMaxSize())
 
-                // Overlay para ayudar al escaneo
+                // Overlay (No cambia)
                 Surface(
                     modifier = Modifier
                         .size(250.dp)
@@ -88,54 +92,12 @@ fun QrScannerScreen(
                     )
                 ) {}
             }
-
             Spacer(Modifier.height(16.dp))
             Text(
                 "Enfoca el código QR en el marco central",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-            Spacer(Modifier.height(8.dp))
-            Text(
-                "La cámara debería activarse automáticamente",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        } else if (qrResult != null) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(16.dp)
-            ) {
-                Text(
-                    "✅ QR Detectado:",
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.padding(bottom = 8.dp)
-                )
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceVariant
-                    )
-                ) {
-                    Text(
-                        qrResult!!.content,
-                        style = MaterialTheme.typography.bodyLarge,
-                        modifier = Modifier.padding(16.dp)
-                    )
-                }
-                Spacer(Modifier.height(16.dp))
-                Button(
-                    onClick = {
-                        viewModel.clearResult()
-                        isScanning = true
-                    },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text("Escanear otro código QR")
-                }
-            }
         }
     }
 }

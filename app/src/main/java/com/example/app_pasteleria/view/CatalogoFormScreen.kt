@@ -16,6 +16,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
@@ -23,14 +25,18 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SegmentedButtonDefaults.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -101,6 +107,20 @@ fun CatalogoFormScreen(
     var cantidad by remember{ mutableStateOf(TextFieldValue("")) }
     var promocion by remember{mutableStateOf(TextFieldValue(""))}
     var mostrarVentanaPromo by remember { mutableStateOf(false) }
+
+    //Resultado QrScannerScreen
+    val savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
+
+    LaunchedEffect(savedStateHandle) {
+
+        val qrResult = savedStateHandle?.get<String>("qr_result")
+        if (qrResult != null) {
+            promocion = TextFieldValue(qrResult)
+
+            savedStateHandle.remove<String>("qr_result")
+        }
+    }
+
 
 
     //Observar los datos en tiempo real
@@ -189,6 +209,17 @@ fun CatalogoFormScreen(
                 // se utiliza para permitir que el usuario ingrese un valor.
 
                 label ={Text("Codigo de Promocion")},
+                trailingIcon = {
+                    IconButton(onClick = {
+                        // 3. Navega a la pantalla del escáner
+                        navController.navigate("QrScannerScreen")
+                    }) {
+                        Icon(
+                            Icons.Default.QrCodeScanner,
+                            contentDescription = "Escanear QR"
+                        )
+                    }
+                },
                 modifier = Modifier.padding(20.dp).fillMaxWidth()
             ) // fin direccion
 
