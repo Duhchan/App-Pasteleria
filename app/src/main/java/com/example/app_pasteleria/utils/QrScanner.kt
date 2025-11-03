@@ -35,7 +35,7 @@ fun QrScanner(
 
     val cameraExecutor = remember { Executors.newSingleThreadExecutor() }
 
-    // Configurar el scanner de ML Kit
+
     val options = BarcodeScannerOptions.Builder()
         .setBarcodeFormats(Barcode.FORMAT_QR_CODE)
         .build()
@@ -53,7 +53,6 @@ fun QrScanner(
             cameraProviderFuture.addListener({
                 val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
 
-                // Configurar análisis de imagen para QR
                 val imageAnalysis = ImageAnalysis.Builder()
                     .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                     .build()
@@ -87,21 +86,21 @@ fun QrScanner(
                     }
                 }
 
-                // Configurar preview
+
                 preview = Preview.Builder().build().also {
                     it.setSurfaceProvider(previewView.surfaceProvider)
                 }
 
-                // Seleccionar cámara trasera
+
                 val cameraSelector = CameraSelector.Builder()
                     .requireLensFacing(CameraSelector.LENS_FACING_BACK)
                     .build()
 
                 try {
-                    // Unbind use cases before rebinding
+
                     cameraProvider.unbindAll()
 
-                    // Bind use cases to camera
+
                     cameraProvider.bindToLifecycle(
                         lifecycleOwner,
                         cameraSelector,
@@ -116,7 +115,7 @@ fun QrScanner(
         modifier = modifier.fillMaxSize()
     )
 
-    // Limpiar cuando el composable se desmonte
+
     DisposableEffect(Unit) {
         onDispose {
             cameraExecutor.shutdown()

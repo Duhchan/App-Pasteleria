@@ -20,6 +20,8 @@ import androidx.compose.material.icons.filled.BakeryDining
 import androidx.compose.material.icons.filled.BrunchDining
 import androidx.compose.material.icons.filled.Cake
 import androidx.compose.material.icons.filled.Cookie
+import androidx.compose.material.icons.filled.QrCodeScanner
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ColorScheme
@@ -107,6 +109,15 @@ fun DrawerMenu(
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .padding(10.dp)
+                )
+                Icon(
+                    Icons.Default.ShoppingCart,
+                    contentDescription = "Carrito de Compra",
+                    tint = Color(0xFFFFF3E0),
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(end = 8.dp)
+                        .size(40.dp )
                 )
             }
         },
