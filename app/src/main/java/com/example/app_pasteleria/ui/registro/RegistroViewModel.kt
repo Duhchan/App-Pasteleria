@@ -33,8 +33,10 @@ class RegistroViewModel(
         }
         val exito = repo.Registro(uiState.correo.trim(), uiState.password)
 
+        uiState = uiState.copy(isLoading = false, error = null)
+
         if (exito) {
-            onSucces(" Registro exitoso")
+            onSucces(uiState.correo.trim())
         } else {
             uiState = uiState.copy(error = "Error de registro", isLoading = false)
         }
