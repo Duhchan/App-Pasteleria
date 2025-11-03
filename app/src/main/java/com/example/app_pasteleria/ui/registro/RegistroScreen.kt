@@ -265,9 +265,10 @@ fun RegistroScreen(
 
                 Button(
                     onClick = {
-                        vm.submitRegistro {
-                            navController.navigate("login") {
-                                popUpTo("login") { inclusive = true }
+                        vm.submitRegistro {correo ->
+                            val Email = Uri.encode(correo)
+                            navController.navigate("DrawerMenu/$Email") {
+                                popUpTo("registro") { inclusive = true }
                                 launchSingleTop = true
                             }
                         }
