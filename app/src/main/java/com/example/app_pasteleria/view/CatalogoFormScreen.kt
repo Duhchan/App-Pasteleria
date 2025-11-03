@@ -21,6 +21,7 @@ import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Checkbox
@@ -252,7 +253,15 @@ fun CatalogoFormScreen(
                     promocion = TextFieldValue("")
 
                 },
-                enabled=cantidad.text.isNotBlank()
+
+                enabled=cantidad.text.isNotBlank(),
+                colors = ButtonDefaults.buttonColors(
+                    // Usa el mismo color café de tu TopAppBar
+                    containerColor = Color(0xFF79594F),
+                    // Define el color del texto como blanco
+                    contentColor = Color.White
+                )
+
             ) // fin Button
             { // inicio texto
                 Text("Confirmar Pedido")
