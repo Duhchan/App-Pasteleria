@@ -1,6 +1,10 @@
 package com.example.app_pasteleria.utils
 
-import android.Manifestimport android.content.Context
+import android.Manifest
+import android.content.Context
+import androidx.core.content.ContextCompat
+
+
 import android.content.pm.PackageManager
 
 object CameraPermissionHelper {
