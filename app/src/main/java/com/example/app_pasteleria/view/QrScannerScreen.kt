@@ -1,4 +1,4 @@
-package com.example.camara.ui.view
+package com.example.app_pasteleria.view
 
 
 import android.widget.Toast
@@ -13,8 +13,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.example.camara.ui.viewmodel.QrViewModel
-import com.example.camara.utils.QrScanner
+import com.example.app_pasteleria.viewmodel.QrViewModel
+import com.example.app_pasteleria.utils.QrScanner
+
+
 
 @Composable
 fun QrScannerScreen(

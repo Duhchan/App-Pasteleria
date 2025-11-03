@@ -1,4 +1,4 @@
-package com.example.camara.utils
+package com.example.app_pasteleria.utils
 
 
 import android.annotation.SuppressLint
@@ -122,3 +122,5 @@ fun QrScanner(
         }
     }
 }
+
+

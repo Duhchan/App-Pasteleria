@@ -1,4 +1,10 @@
-package com.example.app_pasteleria.viewmodel 
+package com.example.app_pasteleria.viewmodel
+
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import com.example.app_pasteleria.data.model.QrResult
+import com.example.app_pasteleria.data.repository.QrRepository
 
 class QrViewModel : ViewModel() {
     private val repository = QrRepository()
