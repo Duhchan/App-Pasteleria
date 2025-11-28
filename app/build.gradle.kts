@@ -100,6 +100,45 @@ dependencies {
     androidTestImplementation(platform(libs.androidx.compose.bom))
     implementation("androidx.compose.material3:material3")
 
+
+
+    // Retrofit y Gson Converter
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+
+// Corrutinas para trabajo asincrónico
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
+
+    // Jetpack Compose
+    implementation("androidx.activity:activity-compose:1.9.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
+
+    dependencies {
+
+
+        //  TEST DEPENDENCIES (CONFIGURACIÓN CORRECTA Y LIMPIA)
+
+// Kotest (solo estas 2 son necesarias)
+        testImplementation("io.kotest:kotest-runner-junit5:5.8.0")
+        testImplementation("io.kotest:kotest-assertions-core:5.8.0")
+
+// MockK
+        testImplementation("io.mockk:mockk:1.13.10")
+
+// Coroutines Test
+        testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.0")
+
+// AndroidX Test
+        testImplementation("androidx.arch.core:core-testing:2.2.0")
+
+// JUnit 5 (solo engine, Kotest usa JUnit 5)
+        testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.0")
+
+
+    }
+
+
+
     //  implementation(libs.androidx.compose.runtime.livedata)
 
     // Option 1: If you add it to libs.versions.toml
@@ -114,4 +153,12 @@ dependencies {
 
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()  // <<< NECESARIO
+
+    testLogging {
+        events("passed", "failed", "skipped")
+    }
 }
