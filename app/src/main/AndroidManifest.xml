@@ -8,6 +8,8 @@
 
     <!-- Declara la cámara solo una vez -->
     <uses-feature android:name="android.hardware.camera" android:required="false"/>
+    <!-- Permiso necesario para hacer peticiones HTTP -->
+    <uses-permission android:name="android.permission.INTERNET" />
 
 
 

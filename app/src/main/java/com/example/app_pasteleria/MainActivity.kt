@@ -20,7 +20,7 @@ import com.example.app_pasteleria.ui.theme.AppPasteleriaTheme
 import com.example.app_pasteleria.viewmodel.CatalogoViewModel
 import com.example.app_pasteleria.viewmodel.CatalogoViewModelFactory
 
-class MainActivity : ComponentActivity() {
+class  MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val database = CatalogoDataBase.getDatabase(applicationContext)
