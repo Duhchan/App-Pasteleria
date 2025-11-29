@@ -2,76 +2,61 @@ package com.example.app_pasteleria.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.app_pasteleria.R
 import com.example.app_pasteleria.data.model.Catalogo
 import com.example.app_pasteleria.data.repository.CatalogoRepository
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class CatalogoViewModel(private val repository: CatalogoRepository) : ViewModel(){
 
+class CatalogoViewModel(private val repository: CatalogoRepository) : ViewModel() {
 
-    private val _pasteles = MutableStateFlow<List<Catalogo>>(emptyList())
-    val pasteles: StateFlow<List<Catalogo>> = _pasteles.asStateFlow()
+    //LISTA DE PEDIDOS (Base de Datos Local)
+    private val _pedidos = MutableStateFlow<List<Catalogo>>(emptyList())
+    val pedidos: StateFlow<List<Catalogo>> = _pedidos.asStateFlow()
+
+    //MENÚ DE TORTAS (Traído de la API)
+    private val _menuTortas = MutableStateFlow<List<Catalogo>>(emptyList())
+    val menuTortas: StateFlow<List<Catalogo>> = _menuTortas.asStateFlow()
+
 
     private val _recordarEntrega = MutableStateFlow(false)
     val recordarEntrega: StateFlow<Boolean> = _recordarEntrega.asStateFlow()
 
-
     init {
-        viewModelScope.launch{
-            repository.eliminarCatalogo()
-            obtenerProductos()
+        // Al iniciar, cargamos los pedidos guardados y el menú de internet
+        viewModelScope.launch {
+            repository.obtenerProductos().collect { listaPedidos ->
+                _pedidos.value = listaPedidos
+            }
         }
+        cargarMenuDesdeApi()
+    }
 
+    private fun cargarMenuDesdeApi() {
+        viewModelScope.launch {
+            // Aquí llamamos al repositorio que baja la lista de npoint.io
+            val listaApi = repository.obtenerTortasDeInternet()
+            _menuTortas.value = listaApi
         }
-    fun guardarPastel(pastel: Catalogo){
+    }
+
+    // guarda en la Base de Datos (CONFIRMAR PEDIDO)
+    fun guardarPastel(pastel: Catalogo) {
         viewModelScope.launch {
             repository.insertarCatalogo(pastel)
         }
-    } // fin guardarProducto
+    }
 
-    fun cambiarEstadoEntregado(){
+    fun cambiarEstadoEntregado() {
+        _recordarEntrega.value = true
+    }
+
+    fun limpiarPedidos() {
         viewModelScope.launch {
-            _recordarEntrega.value = true
+            repository.eliminarCatalogo()
         }
     }
 
-    fun obtenerProductos(){
-        viewModelScope.launch {
-            repository.obtenerProductos().collect{ // se reciben datos del flow
-                listaProductos -> _pasteles.value = listaProductos
-            }
-        }
-    }
-
-    private fun agregarDatosDePrueba() {
-        viewModelScope.launch {
-            delay(500)
-            if (_pasteles.value.isEmpty()) {
-                guardarPastel(Catalogo(
-                    nombre = "Torta de Chocolate",
-                    precio = "45000",
-                    descripcion = "Deliciosa torta de chocolate",
-                    imagen = R.drawable.tortachocolate
-                ))
-                guardarPastel(Catalogo(
-                    nombre = "Torta de Frutas",
-                    precio = "38000",
-                    descripcion = "Torta con frutas frescas"
-                ))
-                guardarPastel(Catalogo(
-                    nombre = "Torta de Vainilla",
-                    precio = "35000",
-                    descripcion = "Clásica torta de vainilla"
-                ))
-            }
-        }
-    }
-
-
-
-} // fin class
+}

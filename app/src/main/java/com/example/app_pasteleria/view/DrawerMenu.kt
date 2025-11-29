@@ -20,6 +20,7 @@ import androidx.compose.material.icons.filled.BakeryDining
 import androidx.compose.material.icons.filled.BrunchDining
 import androidx.compose.material.icons.filled.Cake
 import androidx.compose.material.icons.filled.Cookie
+import androidx.compose.material.icons.filled.Newspaper
 import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.AlertDialog
@@ -143,11 +144,14 @@ fun DrawerMenu(
             // LazyColumn: crear lista de elementos que se pueden desplazar verticalmente
 
             LazyColumn(
+
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
                     .background(Color(0xFFFFDFBF))
             ) {
+
+
                 item { //torta chocolate
                     NavigationDrawerItem(
                         label = {

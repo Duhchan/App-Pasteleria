@@ -71,6 +71,7 @@ import com.example.app_pasteleria.R
 import com.example.app_pasteleria.data.model.Catalogo
 import com.example.app_pasteleria.viewmodel.CatalogoViewModel
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 
@@ -125,7 +126,7 @@ fun CatalogoFormScreen(
 
 
 
-    val pasteles: List<Catalogo> by viewModel.pasteles.collectAsState()
+    val pasteles: List<Catalogo> by viewModel.pedidos.collectAsState()
 
     Scaffold (
         topBar = {
