@@ -49,8 +49,9 @@ fun DrawerMenu(
 
     // Activamos la alerta visual si es correo duoc (opcional, solo visual)
     LaunchedEffect(Unit) {
-        if (correo.lowercase().contains("duocuc.cl")) {
+        if (correo.lowercase().contains("duocuc.cl")&& !viewModel.saludoYaMostrado) {
             mostrarAlertaDuoc = true
+            viewModel.saludoYaMostrado = true
         }
     }
 

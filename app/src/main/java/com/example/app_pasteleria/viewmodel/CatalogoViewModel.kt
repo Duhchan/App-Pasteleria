@@ -12,16 +12,14 @@ import kotlinx.coroutines.launch
 
 class CatalogoViewModel(private val repository: CatalogoRepository) : ViewModel() {
 
-    // 1. LISTA DE PEDIDOS (Lo que compras - Base de Datos)
     private val _pedidos = MutableStateFlow<List<Catalogo>>(emptyList())
     val pedidos: StateFlow<List<Catalogo>> = _pedidos.asStateFlow()
 
-    // 2. MENÚ DE TORTAS (Lo que eliges - API Internet)
-    // --- ESTA ES LA VARIABLE QUE TE FALTA Y CAUSA EL ERROR ---
+
     private val _menuTortas = MutableStateFlow<List<Catalogo>>(emptyList())
     val menuTortas: StateFlow<List<Catalogo>> = _menuTortas.asStateFlow()
+    var saludoYaMostrado: Boolean = false
 
-    // 3. REGALO (Lógica antigua)
     private val _recordarEntrega = MutableStateFlow(false)
     val recordarEntrega: StateFlow<Boolean> = _recordarEntrega.asStateFlow()
 
