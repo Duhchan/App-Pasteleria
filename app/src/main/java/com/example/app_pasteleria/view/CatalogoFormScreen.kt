@@ -177,7 +177,7 @@ fun CatalogoFormScreen(
             )
 
 
-            Text(text="Precio: $precio",
+            Text(text="Precio: $$precio",
                 color = Color(0xFF5D4037),
                 fontFamily = FontFamily.Cursive,
                 fontWeight = FontWeight.Bold,
@@ -227,30 +227,35 @@ fun CatalogoFormScreen(
 
             Button(
                 onClick = {
-                    var precioFinal: String
+                    val cantidadNum = cantidad.text.toIntOrNull() ?: 1
+                    val precioLimpio = precio.replace("$", "").replace(".", "").replace(" ", "")
+                    val precioUnitario = precioLimpio.toIntOrNull() ?: 0
+                    var totalCalculado = precioUnitario * cantidadNum
+
                     if (promocion.text.trim().equals("FELICES50", ignoreCase = true)) {
                         mostrarVentanaPromo = true
-                        val precioLimpio = precio.replace("$", "").replace(".", "")
-                        val precioNumerico = precioLimpio.toIntOrNull() ?: 0
-                        val precioConDescuento = precioNumerico / 2
-                        precioFinal = "$$precioConDescuento"
+                        totalCalculado = totalCalculado / 2 // Descuento del 50%
                     } else {
                         mostrarVentanaPromo = false
-                        precioFinal = precio
                     }
-                    val catalogo= Catalogo(
-                        nombre= nombre,
-                        precio= precioFinal,
+                    val precioFinalParaGuardar = "$$totalCalculado"
+
+                    val nombreConCantidad = "$nombre (x$cantidadNum)"
+
+
+                    val catalogo = Catalogo(
+                        nombre = nombreConCantidad,
+                        precio = precioFinalParaGuardar,
                         descripcion = descripcion,
                         imagen = imagen
                     )
-                    //hace la magia
+
+                    // Guardamos en BD
                     viewModel.guardarPastel(catalogo)
 
-                    //limpiar datos
+                    // Limpiar campos
                     cantidad = TextFieldValue("")
                     promocion = TextFieldValue("")
-
                 },
 
                 enabled=cantidad.text.isNotBlank(),
