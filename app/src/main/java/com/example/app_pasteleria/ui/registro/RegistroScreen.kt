@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -38,6 +39,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.app_pasteleria.R
+
+
 
 import com.example.app_pasteleria.ui.registro.RegistroViewModel
 
@@ -155,7 +158,8 @@ fun RegistroScreen(
                         )
                     },
                     singleLine = true,
-                    modifier = Modifier.fillMaxWidth(0.95f),
+                    modifier = Modifier.fillMaxWidth(0.95f)
+                        .testTag("registroCorreo"),
                     colors = TextFieldDefaults.colors(
                         focusedContainerColor = Color.Gray,
                         unfocusedContainerColor = Color.White
@@ -177,6 +181,7 @@ fun RegistroScreen(
                         ),
                         modifier = Modifier
                             .padding(end = 8.dp)
+
                     )// fin texto 2
                 }
                 OutlinedTextField(
@@ -206,6 +211,7 @@ fun RegistroScreen(
                         }
                     },//fin trail
                     modifier = Modifier.fillMaxWidth(0.95f)
+                        .testTag("registroPass"),
                 )
 
                 Row(
@@ -255,6 +261,7 @@ fun RegistroScreen(
                         }
                     },//fin trail
                     modifier = Modifier.fillMaxWidth(0.95f)
+                        .testTag("registroConfirmPass")
                 )
                 Spacer(modifier = Modifier.height(50.dp))
 
@@ -275,6 +282,7 @@ fun RegistroScreen(
                     },
                     enabled = !state.isLoading,
                     modifier = Modifier.fillMaxWidth(0.6f)
+                        .testTag("botonRegistrar")
                 ) //fin button
                 {
 

@@ -18,7 +18,6 @@ class LoginViewModelTest {
     fun `si devuelve falso marca error`() {
         // GIVEN
         val mockRepo = mockk<AuthRepository>()
-        // Entrenamos al mock para que diga "Login fallido" (false)
         coEvery { mockRepo.login(any(), any()) } returns false
 
         val viewModel = LoginViewModel(mockRepo)
