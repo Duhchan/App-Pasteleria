@@ -63,12 +63,18 @@ dependencies {
     implementation("androidx.compose.material:material-icons-core")
     implementation("androidx.compose.material:material-icons-extended")
 
+    // Retrofit (Para conexión a internet)
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0") // Para convertir JSON a objetos
+
+
     // Dependencias Room
     implementation("androidx.room:room-runtime:2.6.1")
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.material3)  // Versión actualizada
     kapt("androidx.room:room-compiler:2.6.1")          // Misma versión
     implementation("androidx.room:room-ktx:2.6.1")     // Misma versión
+
 
 
     //  implementation(libs.androidx.compose.runtime.livedata)

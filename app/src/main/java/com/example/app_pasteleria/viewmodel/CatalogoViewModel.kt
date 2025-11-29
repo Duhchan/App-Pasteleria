@@ -5,73 +5,75 @@ import androidx.lifecycle.viewModelScope
 import com.example.app_pasteleria.R
 import com.example.app_pasteleria.data.model.Catalogo
 import com.example.app_pasteleria.data.repository.CatalogoRepository
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class CatalogoViewModel(private val repository: CatalogoRepository) : ViewModel(){
+class CatalogoViewModel(private val repository: CatalogoRepository) : ViewModel() {
 
+    // 1. LISTA DE PEDIDOS (Lo que compras - Base de Datos)
+    private val _pedidos = MutableStateFlow<List<Catalogo>>(emptyList())
+    val pedidos: StateFlow<List<Catalogo>> = _pedidos.asStateFlow()
 
-    private val _pasteles = MutableStateFlow<List<Catalogo>>(emptyList())
-    val pasteles: StateFlow<List<Catalogo>> = _pasteles.asStateFlow()
+    // 2. MENÚ DE TORTAS (Lo que eliges - API Internet)
+    // --- ESTA ES LA VARIABLE QUE TE FALTA Y CAUSA EL ERROR ---
+    private val _menuTortas = MutableStateFlow<List<Catalogo>>(emptyList())
+    val menuTortas: StateFlow<List<Catalogo>> = _menuTortas.asStateFlow()
 
+    // 3. REGALO (Lógica antigua)
     private val _recordarEntrega = MutableStateFlow(false)
     val recordarEntrega: StateFlow<Boolean> = _recordarEntrega.asStateFlow()
 
-
     init {
-        viewModelScope.launch{
+        // Limpiamos base de datos al inicio para evitar duplicados en "Pedidos"
+        viewModelScope.launch {
             repository.eliminarCatalogo()
-            obtenerProductos()
+            repository.obtenerProductos().collect { listaPedidos ->
+                _pedidos.value = listaPedidos
+            }
         }
+        // Cargamos las tortas de internet
+        cargarMenuDesdeApi()
+    }
 
-        }
-    fun guardarPastel(pastel: Catalogo){
+    private fun cargarMenuDesdeApi() {
         viewModelScope.launch {
-            repository.insertarCatalogo(pastel)
-        }
-    } // fin guardarProducto
-
-    fun cambiarEstadoEntregado(){
-        viewModelScope.launch {
-            _recordarEntrega.value = true
+            val listaApi = repository.obtenerTortasDeInternet()
+            _menuTortas.value = listaApi
         }
     }
 
-    fun obtenerProductos(){
-        viewModelScope.launch {
-            repository.obtenerProductos().collect{ // se reciben datos del flow
-                listaProductos -> _pasteles.value = listaProductos
+    // Valida si damos el regalo (Solo una vez)
+    fun validarRegalo(correo: String) {
+        val esCorreoDuoc = correo.lowercase().contains("duocuc.cl") ||
+                correo.lowercase().contains("profesor@duoc.cl")
+
+        if (esCorreoDuoc) {
+            viewModelScope.launch {
+                val yaTieneRegalo = _pedidos.value.any { it.nombre == "Torta Regalo Duoc" }
+                if (!yaTieneRegalo) {
+                    val regalo = Catalogo(
+                        nombre = "Torta Regalo Duoc",
+                        precio = "0",
+                        descripcion = "¡Felicidades! Tienes una torta de regalo por ser comunidad Duoc.",
+                        imagen = R.drawable.tortagratis
+                    )
+                    repository.insertarCatalogo(regalo)
+                }
             }
         }
     }
 
-    private fun agregarDatosDePrueba() {
-        viewModelScope.launch {
-            delay(500)
-            if (_pasteles.value.isEmpty()) {
-                guardarPastel(Catalogo(
-                    nombre = "Torta de Chocolate",
-                    precio = "45000",
-                    descripcion = "Deliciosa torta de chocolate",
-                    imagen = R.drawable.tortachocolate
-                ))
-                guardarPastel(Catalogo(
-                    nombre = "Torta de Frutas",
-                    precio = "38000",
-                    descripcion = "Torta con frutas frescas"
-                ))
-                guardarPastel(Catalogo(
-                    nombre = "Torta de Vainilla",
-                    precio = "35000",
-                    descripcion = "Clásica torta de vainilla"
-                ))
-            }
-        }
+    fun guardarPastel(pastel: Catalogo) {
+        viewModelScope.launch { repository.insertarCatalogo(pastel) }
     }
 
+    fun cambiarEstadoEntregado() {
+        _recordarEntrega.value = true
+    }
 
-
-} // fin class
+    fun limpiarPedidos() {
+        viewModelScope.launch { repository.eliminarCatalogo() }
+    }
+}
