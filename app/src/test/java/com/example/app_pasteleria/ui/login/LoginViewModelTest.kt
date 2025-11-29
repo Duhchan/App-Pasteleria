@@ -1,4 +1,5 @@
-package com.example.app_pasteleria.login
+package com.example.app_pasteleria.ui.login
+
 
 import com.example.app_pasteleria.MainDispatcherExtension
 import com.example.app_pasteleria.data.repository.AuthRepository
@@ -14,17 +15,20 @@ import org.junit.jupiter.api.extension.ExtendWith
 class LoginViewModelTest {
 
     @Test
-    fun `si es falso se devuelve error`() {
-
+    fun `si devuelve falso marca error`() {
+        // GIVEN
         val mockRepo = mockk<AuthRepository>()
-
+        // Entrenamos al mock para que diga "Login fallido" (false)
         coEvery { mockRepo.login(any(), any()) } returns false
 
         val viewModel = LoginViewModel(mockRepo)
         viewModel.onCorreoChange("test@duoc.cl")
         viewModel.onPasswordChange("1234")
 
+        // WHEN
         viewModel.submit { }
+
+        // THEN
         assertEquals("Credenciales Inválidas", viewModel.uiState.error)
         assertFalse(viewModel.uiState.isLoading)
     }

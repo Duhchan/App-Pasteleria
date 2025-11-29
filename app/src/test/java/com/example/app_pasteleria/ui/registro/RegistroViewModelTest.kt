@@ -1,4 +1,4 @@
-package com.example.app_pasteleria.registro
+package com.example.app_pasteleria.ui.registro
 
 
 import com.example.app_pasteleria.MainDispatcherExtension
