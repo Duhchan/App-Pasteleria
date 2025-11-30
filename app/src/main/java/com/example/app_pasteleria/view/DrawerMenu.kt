@@ -32,7 +32,6 @@ fun DrawerMenu(
     navController: NavController,
     viewModel: CatalogoViewModel
 ) {
-    // 1. VALIDACIÓN ÚNICA DEL REGALO (Al iniciar la pantalla)
     LaunchedEffect(key1 = correo) {
         viewModel.validarRegalo(correo)
     }

@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.QrCodeScanner
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
@@ -130,16 +131,29 @@ fun CatalogoFormScreen(
 
     Scaffold (
         topBar = {
-            CenterAlignedTopAppBar(title = {Text("Detalle de Producto",
-                style= MaterialTheme.typography.headlineLarge,
-                color= Color(0xFFFFF3E0),
-                fontWeight = FontWeight.Bold,
-                fontFamily = FontFamily.Cursive,
-                modifier = Modifier.background(Color(0xFF79594F))
-
-            )}, // fin Bootom App
-            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                containerColor = Color(0xFF79594F)))
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        "Detalle de Producto",
+                        style = MaterialTheme.typography.headlineLarge,
+                        color = Color(0xFFFFF3E0),
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = FontFamily.Cursive,
+                    )
+                },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = Color(0xFF79594F)
+                ),
+                actions = {
+                    Icon(
+                        imageVector = Icons.Default.ShoppingCart,
+                        contentDescription = "Carrito de Compra",
+                        tint = Color(0xFFFFF3E0),
+                        modifier = Modifier
+                            .padding(end = 16.dp)
+                            .size(40.dp)
+                    )
+                })
         }// fin bottom
 
     ) // fin Scaffold
