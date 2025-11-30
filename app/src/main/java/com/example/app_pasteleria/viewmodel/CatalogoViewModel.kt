@@ -1,5 +1,8 @@
 package com.example.app_pasteleria.viewmodel
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.app_pasteleria.R
@@ -23,6 +26,15 @@ class CatalogoViewModel(private val repository: CatalogoRepository) : ViewModel(
     private val _recordarEntrega = MutableStateFlow(false)
     val recordarEntrega: StateFlow<Boolean> = _recordarEntrega.asStateFlow()
 
+    // ESTO ES EL COMENTARIO PARA AGREGAR EN PRUEBAA//
+    //-----------------------------------------------------------------//
+    var comentario by mutableStateOf("")
+        private set
+
+    fun actualizarComentario(nuevoTexto: String) {
+        comentario = nuevoTexto
+    }
+    // FIN  DE COMENTARIOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO------------------------//
     init {
         // Limpiamos base de datos al inicio para evitar duplicados en "Pedidos"
         viewModelScope.launch {

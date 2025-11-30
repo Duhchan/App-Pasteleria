@@ -221,8 +221,19 @@ fun CatalogoFormScreen(
                     }
                 },
                 modifier = Modifier.padding(20.dp).fillMaxWidth()
-            ) // fin direccion
-
+            ) // fin promocion
+//COMENTARIO QUE SE DEBE AGREGAR EN TIEMPO REAAAAAAALLL----------------------------------------
+            OutlinedTextField(
+                value = viewModel.comentario,
+                onValueChange = { nuevoTexto ->
+                    viewModel.actualizarComentario(nuevoTexto)
+                },
+                label = { Text("Comentario")},
+                placeholder = { Text("Escribe una nota para el pedido...") },
+                modifier = Modifier.padding(20.dp).fillMaxWidth(),
+                minLines = 2,
+                maxLines = 4
+            ) // FIN DE COMENATRIO PARA TIEMPO REAL ------------------------------------------
             Spacer(modifier =Modifier.height(16.dp))
 
             Button(
