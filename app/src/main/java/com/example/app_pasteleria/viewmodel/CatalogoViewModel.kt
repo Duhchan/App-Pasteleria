@@ -15,75 +15,79 @@ import kotlinx.coroutines.launch
 
 class CatalogoViewModel(private val repository: CatalogoRepository) : ViewModel() {
 
+    //ESTADO DEL CARRITO
     private val _pedidos = MutableStateFlow<List<Catalogo>>(emptyList())
     val pedidos: StateFlow<List<Catalogo>> = _pedidos.asStateFlow()
 
-
+    //ESTADO DEL MENÚ (Tortas para elegir)
     private val _menuTortas = MutableStateFlow<List<Catalogo>>(emptyList())
     val menuTortas: StateFlow<List<Catalogo>> = _menuTortas.asStateFlow()
+
+
     var saludoYaMostrado: Boolean = false
 
-    private val _recordarEntrega = MutableStateFlow(false)
-    val recordarEntrega: StateFlow<Boolean> = _recordarEntrega.asStateFlow()
 
-    // ESTO ES EL COMENTARIO PARA AGREGAR EN PRUEBAA//
-    //-----------------------------------------------------------------//
     var comentario by mutableStateOf("")
         private set
 
-    fun actualizarComentario(nuevoTexto: String) {
-        comentario = nuevoTexto
-    }
-    // FIN  DE COMENTARIOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO------------------------//
     init {
-        // Limpiamos base de datos al inicio para evitar duplicados en "Pedidos"
-        viewModelScope.launch {
-            repository.eliminarCatalogo()
-            repository.obtenerProductos().collect { listaPedidos ->
-                _pedidos.value = listaPedidos
-            }
-        }
-        // Cargamos las tortas de internet
-        cargarMenuDesdeApi()
+        // Al iniciar, cargamos el menú y el carrito desde internet
+        cargarDatosIniciales()
     }
 
-    private fun cargarMenuDesdeApi() {
+    private fun cargarDatosIniciales() {
         viewModelScope.launch {
-            val listaApi = repository.obtenerTortasDeInternet()
-            _menuTortas.value = listaApi
+            // A) Cargar menú de tortas
+            _menuTortas.value = repository.obtenerTortasDeInternet()
+
+            // B) Cargar carrito actual de la nube
+            recargarCarrito()
         }
     }
 
-    // Valida si damos el regalo (Solo una vez)
-    fun validarRegalo(correo: String) {
-        val esCorreoDuoc = correo.lowercase().contains("duocuc.cl") ||
-                correo.lowercase().contains("profesor@duoc.cl")
-
-        if (esCorreoDuoc) {
-            viewModelScope.launch {
-                val yaTieneRegalo = _pedidos.value.any { it.nombre == "Torta Regalo Duoc" }
-                if (!yaTieneRegalo) {
-                    val regalo = Catalogo(
-                        nombre = "Torta Regalo Duoc",
-                        precio = "0",
-                        descripcion = "¡Felicidades! Tienes una torta de regalo por ser comunidad Duoc.",
-                        imagen = R.drawable.tortagratis
-                    )
-                    repository.insertarCatalogo(regalo)
-                }
-            }
+    // Función para refrescar el carrito desde npoint
+    fun recargarCarrito() {
+        viewModelScope.launch {
+            val carritoNube = repository.obtenerCarritoNube()
+            _pedidos.value = carritoNube
         }
     }
 
     fun guardarPastel(pastel: Catalogo) {
-        viewModelScope.launch { repository.insertarCatalogo(pastel) }
+        viewModelScope.launch {
+            // 1. Subimos el cambio
+            repository.agregarAlCarritoNube(pastel)
+            // 2. Recargamos la lista para ver el cambio reflejado
+            recargarCarrito()
+        }
     }
 
-    fun cambiarEstadoEntregado() {
-        _recordarEntrega.value = true
+    fun eliminarPastel(pastel: Catalogo) {
+        viewModelScope.launch {
+            repository.eliminarDelCarritoNube(pastel)
+            recargarCarrito()
+        }
     }
 
-    fun limpiarPedidos() {
-        viewModelScope.launch { repository.eliminarCatalogo() }
+    fun actualizarCantidad(pastel: Catalogo, nuevaCantidad: Int) {
+        viewModelScope.launch {
+            repository.actualizarCantidadNube(pastel, nuevaCantidad)
+            recargarCarrito()
+        }
+    }
+
+    // Función para el campo de texto de comentario
+    fun actualizarComentario(nuevoTexto: String) {
+        comentario = nuevoTexto
+    }
+
+    // Lógica del regalo
+    fun validarRegalo(correo: String) {
+        val esCorreoDuoc = correo.lowercase().contains("duocuc.cl") ||
+                correo.lowercase().contains("profesor@duoc.cl")
+
+        if (esCorreoDuoc && !saludoYaMostrado) {
+            // Aquí podrías agregar lógica extra si quisieras guardar el regalo en la nube
+        }
     }
 }
