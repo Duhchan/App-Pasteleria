@@ -81,13 +81,37 @@ class CatalogoViewModel(private val repository: CatalogoRepository) : ViewModel(
         comentario = nuevoTexto
     }
 
-    // Lógica del regalo
+
     fun validarRegalo(correo: String) {
         val esCorreoDuoc = correo.lowercase().contains("duocuc.cl") ||
                 correo.lowercase().contains("profesor@duoc.cl")
 
+
         if (esCorreoDuoc && !saludoYaMostrado) {
-            // Aquí podrías agregar lógica extra si quisieras guardar el regalo en la nube
+            saludoYaMostrado = true
+
+            viewModelScope.launch {
+                // Bajamos el carrito actual para ver si YA tiene el regalo
+                val carritoActual = repository.obtenerCarritoNube()
+                val yaTieneRegalo = carritoActual.any { it.nombre == "Torta de Regalo Duoc" }
+
+                if (!yaTieneRegalo) {
+                    // objeto del regalo
+                    val tortaRegalo = Catalogo(
+                        nombre = "Torta de Regalo Duoc",
+                        precio = 0,
+                        descripcion = "Premio exclusivo para comunidad Duoc UC",
+                        imagen = R.drawable.tortagratis,
+                        cantidad = 1
+                    )
+
+                    // subimos al json
+                    repository.agregarAlCarritoNube(tortaRegalo)
+
+
+                    recargarCarrito()
+                }
+            }
         }
     }
 }
