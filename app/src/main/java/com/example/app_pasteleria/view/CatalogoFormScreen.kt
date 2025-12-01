@@ -195,18 +195,6 @@ fun CatalogoFormScreen(
                 modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp).fillMaxWidth()
             )
 
-            // --- NUEVO CAMPO: COMENTARIO ---
-            OutlinedTextField(
-                value = comentarioUsuario,
-                onValueChange = { viewModel.actualizarComentario(it) }, // Actualizamos el ViewModel
-                label = { Text("Comentario (Opcional)") },
-                placeholder = { Text("Ej: Sin gluten, con dedicatoria...") },
-                modifier = Modifier
-                    .padding(horizontal = 20.dp, vertical = 5.dp)
-                    .fillMaxWidth(),
-                minLines = 2
-            )
-            // -------------------------------
 
             // Botón Agregar
             Button(
