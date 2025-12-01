@@ -1,6 +1,5 @@
 package com.example.app_pasteleria.navigation
 
-
 import RegistroScreen
 import android.net.Uri
 import androidx.compose.runtime.Composable
@@ -12,113 +11,96 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.app_pasteleria.ui.login.LoginScreen
+import com.example.app_pasteleria.ui.login.LoginViewModel
 import com.example.app_pasteleria.ui.registro.RegistroViewModel
-import com.example.app_pasteleria.view.DrawerMenu
 import com.example.app_pasteleria.view.CatalogoFormScreen
-
+import com.example.app_pasteleria.view.DrawerMenu
 import com.example.app_pasteleria.view.QrScannerScreen
+import com.example.app_pasteleria.viewmodel.AuthViewModelFactory // Importante
 import com.example.app_pasteleria.viewmodel.CatalogoViewModel
 import com.example.app_pasteleria.viewmodel.QrViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 
-
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun AppNav(viewModel: CatalogoViewModel){
-    //Crear el controlador
+fun AppNav(
+    catalogoViewModel: CatalogoViewModel, // Antes se llamaba solo viewModel
+    authViewModelFactory: AuthViewModelFactory // <--- ESTO FALTABA
+) {
     val navController = rememberNavController()
-    NavHost(navController= navController, startDestination = "login")
-    {
-        composable("login"){
-            LoginScreen(navController = navController)
 
+    NavHost(navController = navController, startDestination = "login") {
+
+        // --- PANTALLA LOGIN ---
+        composable("login") {
+            // Aquí usamos la factory que recibimos arriba
+            val loginViewModel: LoginViewModel = viewModel(factory = authViewModelFactory)
+
+            LoginScreen(navController = navController, vm = loginViewModel)
         }
-        composable("registro"){
 
-            val registroViewModel: RegistroViewModel = viewModel()
+        // --- PANTALLA REGISTRO ---
+        composable("registro") {
+            // Aquí también usamos la factory
+            val registroViewModel: RegistroViewModel = viewModel(factory = authViewModelFactory)
 
             RegistroScreen(
                 navController = navController,
                 vm = registroViewModel
             )
-        }//composable
+        }
 
+        // --- MENU PRINCIPAL (Drawer) ---
         composable(
-            route="DrawerMenu/{correo}",
-            arguments = listOf(
-                navArgument("correo"){
-                    type = NavType.StringType
-                }
-            )//fin lisof
-        )// fin composable
-        {//inicio
-                backStackEntry ->
+            route = "DrawerMenu/{correo}",
+            arguments = listOf(navArgument("correo") { type = NavType.StringType })
+        ) { backStackEntry ->
             val obtenerCorreo = backStackEntry.arguments?.getString("correo") ?: ""
             val correo = Uri.decode(obtenerCorreo)
-            DrawerMenu(correo = correo, navController= navController, viewModel = viewModel)
+            // Aquí pasamos el catalogoViewModel que ya venía de antes
+            DrawerMenu(correo = correo, navController = navController, viewModel = catalogoViewModel)
         }
 
-        // ruta del Formulario: ProductoFormScreen
-
+        // --- FORMULARIO PRODUCTO ---
         composable(
-            route="CatalogoFormScreen/{nombre}/{precio}/{descripcion}",
+            route = "CatalogoFormScreen/{nombre}/{precio}/{descripcion}",
             arguments = listOf(
-                navArgument("nombre"){ type = NavType.StringType },
-                navArgument("precio"){ type = NavType.StringType },
-                navArgument("descripcion"){ type = NavType.StringType }
-            )//fin lisof
-        ) // fin composable
+                navArgument("nombre") { type = NavType.StringType },
+                navArgument("precio") { type = NavType.StringType },
+                navArgument("descripcion") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val nombre = Uri.decode(backStackEntry.arguments?.getString("nombre") ?: "")
+            val precio = backStackEntry.arguments?.getString("precio") ?: ""
+            val descripcion = backStackEntry.arguments?.getString("descripcion") ?: ""
 
-        { // inicio
-                backStackEntry ->
-            val nombre = Uri.decode(backStackEntry.arguments?.getString("nombre") ?:"")
-            val precio = backStackEntry.arguments?.getString("precio") ?:""
-            val descripcion = backStackEntry.arguments?.getString("descripcion") ?:""
             CatalogoFormScreen(
                 navController = navController,
-                nombre= nombre,
-                precio= precio,
+                nombre = nombre,
+                precio = precio,
                 descripcion = descripcion,
-                viewModel = viewModel
+                viewModel = catalogoViewModel
             )
-
         }
 
+        // --- ESCANER QR ---
         composable("QrScannerScreen") {
+            val qrViewModel: QrViewModel = viewModel() // Este no necesita factory por ahora
 
-            val qrViewModel: QrViewModel = viewModel()
+            val cameraPermissionState = rememberPermissionState(android.Manifest.permission.CAMERA)
 
-            // lógica de permisos
-            val cameraPermissionState = rememberPermissionState(
-                android.Manifest.permission.CAMERA
-            )
-
-            // Pide el permiso
             LaunchedEffect(Unit) {
                 cameraPermissionState.launchPermissionRequest()
             }
 
-            // pantalla QR
             QrScannerScreen(
                 viewModel = qrViewModel,
                 navController = navController,
                 hasCameraPermission = cameraPermissionState.status.isGranted,
-                onRequestPermission = {
-                    cameraPermissionState.launchPermissionRequest()
-                }
+                onRequestPermission = { cameraPermissionState.launchPermissionRequest() }
             )
         }
-
-
-
-
-
-
-
-
-
-    }//fin NavHost
-
-}//fin appNav
+    }
+}

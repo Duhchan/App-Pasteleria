@@ -5,17 +5,19 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.app_pasteleria.data.dao.CatalogoDao
+import com.example.app_pasteleria.data.dao.UsuarioDao
 import com.example.app_pasteleria.data.model.Catalogo
+import com.example.app_pasteleria.data.model.Usuario
 
 @Database(
-    entities = [Catalogo::class],
-    version = 2,
-    exportSchema = false // evite warning
+    entities = [Catalogo::class, Usuario::class],
+    version = 3,
+    exportSchema = false
 )
 
 abstract class CatalogoDataBase: RoomDatabase(){
     abstract fun catalogoDao(): CatalogoDao
-
+    abstract fun usuarioDao(): UsuarioDao
     companion object{
         private var INSTANCE: CatalogoDataBase? = null
 
@@ -25,7 +27,9 @@ abstract class CatalogoDataBase: RoomDatabase(){
                     context.applicationContext,
                     CatalogoDataBase::class.java,
                     "catalogo_database"
-                ).build()
+                )
+                    .fallbackToDestructiveMigration()
+                    .build()
                 INSTANCE = instance
                 instance
             } // fin return
