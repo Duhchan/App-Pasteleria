@@ -4,13 +4,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.app_pasteleria.data.repository.AuthRepository
+import kotlinx.coroutines.launch
 
 
 class RegistroViewModel(
-    private val repo: AuthRepository = AuthRepository()
-
-): ViewModel() {
+    private val repo: AuthRepository): ViewModel() {
     var uiState by mutableStateOf(RegistroUiState())
     fun onCorreoChange(correo: String) {
         uiState = uiState.copy(correo = correo, error = null)
@@ -31,16 +31,17 @@ class RegistroViewModel(
             uiState = uiState.copy(error = "Las contraseñas no coinciden", isLoading = false)
             return
         }
-        val exito = repo.Registro(uiState.correo.trim(), uiState.password)
 
-        uiState = uiState.copy(isLoading = false, error = null)
+        viewModelScope.launch { // <--- Lanzamos corrutina
+            val exito = repo.registro(uiState.correo.trim(), uiState.password)
 
-        if (exito) {
-            onSucces(uiState.correo.trim())
-        } else {
-            uiState = uiState.copy(error = "Error de registro", isLoading = false)
+            uiState = uiState.copy(isLoading = false, error = null)
+
+            if (exito) {
+                onSucces(uiState.correo.trim())
+            } else {
+                uiState = uiState.copy(error = "Error: El usuario ya existe o datos inválidos", isLoading = false)
+            }
         }
-
-
     }
 }
