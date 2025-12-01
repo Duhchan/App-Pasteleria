@@ -16,6 +16,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
@@ -181,6 +182,7 @@ fun CatalogoFormScreen(
                 },
                 label = { Text("Cantidad") },
                 modifier = Modifier.padding(horizontal = 20.dp).fillMaxWidth()
+                .testTag("inputCantidad")
             )
 
             OutlinedTextField(
@@ -193,6 +195,7 @@ fun CatalogoFormScreen(
                     }
                 },
                 modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp).fillMaxWidth()
+                .testTag("inputPromocion")
             )
 
 
@@ -232,6 +235,7 @@ fun CatalogoFormScreen(
                     contentColor = Color.White
                 ),
                 modifier = Modifier.padding(top = 10.dp, bottom = 20.dp)
+                    .testTag("botonAgregar")
             ) {
                 Text("Agregar al Carrito")
             }
