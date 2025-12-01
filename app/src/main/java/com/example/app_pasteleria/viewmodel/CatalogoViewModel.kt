@@ -79,9 +79,7 @@ class CatalogoViewModel(private val repository: CatalogoRepository) : ViewModel(
     }
 
     // Función para el campo de texto de comentario
-    fun actualizarComentario(nuevoTexto: String) {
-        comentario = nuevoTexto
-    }
+
 
 
     fun validarRegalo(correo: String) {

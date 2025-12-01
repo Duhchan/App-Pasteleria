@@ -73,8 +73,8 @@ fun CatalogoFormScreen(
     // Datos del ViewModel
     val pastelesEnCarrito by viewModel.pedidos.collectAsState()
 
-    // --- ESTO ES IMPORTANTE: Traemos el estado del comentario del ViewModel ---
-    val comentarioUsuario = viewModel.comentario
+    //Traemos el estado del comentario del ViewModel ---
+
 
     // Resultado QR
     val savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
@@ -224,7 +224,7 @@ fun CatalogoFormScreen(
                     // Limpiar campos
                     cantidad = TextFieldValue("")
                     promocion = TextFieldValue("")
-                    viewModel.actualizarComentario("")
+
                 },
                 enabled = cantidad.text.isNotBlank(),
                 colors = ButtonDefaults.buttonColors(
