@@ -11,6 +11,7 @@ data class Catalogo(
     val precio :Int,
     val descripcion : String,
     val imagen : Int = 0,
-    val cantidad : Int = 1
+    val cantidad : Int = 1,
+    val comentario: String = ""
 
 )

@@ -9,7 +9,7 @@ import com.example.app_pasteleria.data.model.Catalogo
 
 @Database(
     entities = [Catalogo::class],
-    version = 2,
+    version = 3,
     exportSchema = false // evite warning
 )
 

@@ -78,6 +78,7 @@ fun CatalogoFormScreen(
     var cantidad by remember { mutableStateOf(TextFieldValue("")) }
     var promocion by remember { mutableStateOf(TextFieldValue("")) }
     var mostrarVentanaPromo by remember { mutableStateOf(false) }
+    var comentarioInput by remember { mutableStateOf(TextFieldValue("")) }
 
     // Estado para mostrar/ocultar el carrito desplegable
     var mostrarCarrito by remember { mutableStateOf(false) }
@@ -205,6 +206,13 @@ fun CatalogoFormScreen(
                 },
                 modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp).fillMaxWidth()
             )
+            OutlinedTextField(
+                value = comentarioInput,
+                onValueChange = { comentarioInput = it },
+                label = { Text("Comentario (Opcional)") },
+                modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp).fillMaxWidth(),
+                maxLines = 3
+            )
 
             // Botón Agregar
             Button(
@@ -228,7 +236,9 @@ fun CatalogoFormScreen(
                         descripcion = descripcion,
                         // Guardamos la imagen correcta también en el carrito
                         imagen = obtenerImagenPastel(nombre),
-                        cantidad = cantidadNum
+                        cantidad = cantidadNum,
+                        comentario = comentarioInput.text
+
                     )
 
                     viewModel.guardarPastel(catalogo)
