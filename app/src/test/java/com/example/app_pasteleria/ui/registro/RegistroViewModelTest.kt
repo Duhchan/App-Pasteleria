@@ -26,6 +26,6 @@ class RegistroViewModelTest {
         viewModel.submitRegistro { }
         assertEquals("Las contraseñas no coinciden", viewModel.uiState.error)
 
-        coVerify(exactly = 0) { mockRepo.Registro(any(), any()) }
+        coVerify(exactly = 0) { mockRepo.registro(any(), any()) }
     }
 }
