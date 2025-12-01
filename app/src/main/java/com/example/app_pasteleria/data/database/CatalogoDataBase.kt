@@ -10,15 +10,11 @@ import com.example.app_pasteleria.data.model.Catalogo
 import com.example.app_pasteleria.data.model.Usuario
 
 @Database(
-<<<<<<< HEAD
-    entities = [Catalogo::class],
-    version = 3,
-    exportSchema = false // evite warning
-=======
+
     entities = [Catalogo::class, Usuario::class],
     version = 3,
     exportSchema = false
->>>>>>> f004ecc1af9cd0cfb2b9b4e72060067d525672b5
+
 )
 
 abstract class CatalogoDataBase: RoomDatabase(){
