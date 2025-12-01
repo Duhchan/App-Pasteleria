@@ -58,6 +58,8 @@ class CatalogoRepository(private val catalogoDao: CatalogoDao) {
         try {
             val listaActual = obtenerCarritoNube().toMutableList()
             listaActual.add(nuevoPastel)
+            Log.d("CARRITO_DEBUG", "Agregando pastel: ${nuevoPastel.nombre}")
+            Log.d("CARRITO_DEBUG", "Comentario a enviar: '${nuevoPastel.comentario}'")
             Log.d("CARRITO", "Intentando subir lista con tamaño: ${listaActual.size}")
             RetrofitInstance.api.sobreescribirCarrito(listaActual)
             Log.d("CARRITO", "Subida exitosa")

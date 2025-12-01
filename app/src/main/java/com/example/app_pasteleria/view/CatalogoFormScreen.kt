@@ -6,8 +6,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn // Se puede borrar si no se usa, pero no molesta
-import androidx.compose.foundation.lazy.items // Se puede borrar
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
@@ -17,16 +15,15 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.app_pasteleria.R
 import com.example.app_pasteleria.data.model.Catalogo
@@ -42,13 +39,10 @@ fun CatalogoFormScreen(
     imagen: Int = 0,
     viewModel: CatalogoViewModel
 ) {
-    // --- FUNCIÓN CORREGIDA PARA OBTENER TODAS LAS IMÁGENES ---
+    // Función auxiliar para imagen
     fun obtenerImagenPastel(nombrePastel: String): Int {
-        // Normalizamos el texto (minúsculas y sin espacios) para facilitar la coincidencia
         val nombreLimpio = nombrePastel.lowercase().replace(" ", "").replace("de", "")
-
         return when {
-            // Coincidencias exactas o aproximadas con tus drawables
             nombreLimpio.contains("chocolate") && nombreLimpio.contains("torta") -> R.drawable.tortachocolate
             nombreLimpio.contains("fruta") -> R.drawable.tortafruta
             nombreLimpio.contains("vainilla") -> R.drawable.tortavainilla
@@ -65,11 +59,7 @@ fun CatalogoFormScreen(
             nombreLimpio.contains("avena") -> R.drawable.galletaavena
             nombreLimpio.contains("cumple") -> R.drawable.tortacumpleanios
             nombreLimpio.contains("boda") -> R.drawable.tortaboda
-
-            // Si ya venía una imagen válida (ID distinto de 0), úsala
             imagen != 0 -> imagen
-
-            // Si no, muestra el logo por defecto
             else -> R.drawable.logo
         }
     }
@@ -78,15 +68,17 @@ fun CatalogoFormScreen(
     var cantidad by remember { mutableStateOf(TextFieldValue("")) }
     var promocion by remember { mutableStateOf(TextFieldValue("")) }
     var mostrarVentanaPromo by remember { mutableStateOf(false) }
-    var comentarioInput by remember { mutableStateOf(TextFieldValue("")) }
 
-    // Estado para mostrar/ocultar el carrito desplegable
+    // Estado del carrito desplegable
     var mostrarCarrito by remember { mutableStateOf(false) }
 
-    // Obtenemos la lista de pedidos de la NUBE
+    // Datos del ViewModel
     val pastelesEnCarrito by viewModel.pedidos.collectAsState()
 
-    // Resultado QrScannerScreen
+    // --- ESTO ES IMPORTANTE: Traemos el estado del comentario del ViewModel ---
+    val comentarioUsuario = viewModel.comentario
+
+    // Resultado QR
     val savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
     LaunchedEffect(savedStateHandle) {
         val qrResult = savedStateHandle?.get<String>("qr_result")
@@ -121,8 +113,6 @@ fun CatalogoFormScreen(
                                 modifier = Modifier.size(30.dp)
                             )
                         }
-
-                        // Llamamos al componente del carrito
                         CarritoDesplegable(
                             expanded = mostrarCarrito,
                             onDismissRequest = { mostrarCarrito = false },
@@ -139,11 +129,10 @@ fun CatalogoFormScreen(
                 .padding(innerPadding)
                 .fillMaxSize()
                 .fillMaxWidth()
+                .verticalScroll(rememberScrollState()) // Agregamos scroll por si el teclado tapa
                 .background(Color(0xFFFFDFBF)),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // --- IMAGEN Y DETALLES DEL PRODUCTO ---
-            // Aquí usamos la función corregida
             Image(
                 painter = painterResource(id = obtenerImagenPastel(nombre)),
                 contentDescription = "Imagen Producto",
@@ -181,8 +170,9 @@ fun CatalogoFormScreen(
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
 
-            // --- FORMULARIO ---
             Spacer(modifier = Modifier.height(16.dp))
+
+            // --- CAMPOS DE TEXTO ---
 
             OutlinedTextField(
                 value = cantidad,
@@ -206,23 +196,27 @@ fun CatalogoFormScreen(
                 },
                 modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp).fillMaxWidth()
             )
+
+            // --- NUEVO CAMPO: COMENTARIO ---
             OutlinedTextField(
-                value = comentarioInput,
-                onValueChange = { comentarioInput = it },
+                value = comentarioUsuario,
+                onValueChange = { viewModel.actualizarComentario(it) }, // Actualizamos el ViewModel
                 label = { Text("Comentario (Opcional)") },
-                modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp).fillMaxWidth(),
-                maxLines = 3
+                placeholder = { Text("Ej: Sin gluten, con dedicatoria...") },
+                modifier = Modifier
+                    .padding(horizontal = 20.dp, vertical = 5.dp)
+                    .fillMaxWidth(),
+                minLines = 2
             )
+            // -------------------------------
 
             // Botón Agregar
             Button(
                 onClick = {
                     val cantidadNum = cantidad.text.toIntOrNull() ?: 1
-                    // Limpiamos el precio ($ y puntos) para guardarlo como Int
                     val precioLimpio = precio.replace("$", "").replace(".", "").replace(" ", "").toIntOrNull() ?: 0
 
                     var precioUnitario = precioLimpio
-
                     if (promocion.text.trim().equals("FELICES50", ignoreCase = true)) {
                         mostrarVentanaPromo = true
                         precioUnitario = precioLimpio / 2
@@ -234,24 +228,24 @@ fun CatalogoFormScreen(
                         nombre = nombre,
                         precio = precioUnitario,
                         descripcion = descripcion,
-                        // Guardamos la imagen correcta también en el carrito
                         imagen = obtenerImagenPastel(nombre),
                         cantidad = cantidadNum,
-                        comentario = comentarioInput.text
-
+                        comentario = viewModel.comentario
                     )
 
                     viewModel.guardarPastel(catalogo)
 
+                    // Limpiar campos
                     cantidad = TextFieldValue("")
                     promocion = TextFieldValue("")
+                    viewModel.actualizarComentario("")
                 },
                 enabled = cantidad.text.isNotBlank(),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFF79594F),
                     contentColor = Color.White
                 ),
-                modifier = Modifier.padding(top = 10.dp)
+                modifier = Modifier.padding(top = 10.dp, bottom = 20.dp)
             ) {
                 Text("Agregar al Carrito")
             }
@@ -272,7 +266,52 @@ fun CatalogoFormScreen(
     }
 }
 
-// --- COMPONENTE DEL CARRITO DESPLEGABLE ---
+// --- ITEM CARRITO (Actualizado para mostrar el comentario) ---
+@Composable
+fun ItemCarrito(pastel: Catalogo, viewModel: CatalogoViewModel) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp)
+            .border(1.dp, Color(0xFF886655), RoundedCornerShape(10.dp)),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFFFF3E0))
+    ) {
+        Row(
+            modifier = Modifier.padding(8.dp).fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(pastel.nombre, fontWeight = FontWeight.Bold, color = Color(0xFF5D4037))
+                Text("$${pastel.precio}", fontSize = 12.sp, color = Color(0xFF5D4037))
+
+                // Mostrar comentario si existe
+                if (pastel.comentario.isNotEmpty()) {
+                    Text(
+                        text = "Nota: ${pastel.comentario}",
+                        fontSize = 11.sp,
+                        fontStyle = FontStyle.Italic,
+                        color = Color.Gray
+                    )
+                }
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                IconButton(onClick = { viewModel.actualizarCantidad(pastel, pastel.cantidad - 1) }) {
+                    Text("-", fontWeight = FontWeight.Bold, fontSize = 20.sp, color = Color(0xFF79594F))
+                }
+                Text("${pastel.cantidad}", fontWeight = FontWeight.Bold, color = Color(0xFF5D4037))
+                IconButton(onClick = { viewModel.actualizarCantidad(pastel, pastel.cantidad + 1) }) {
+                    Text("+", fontWeight = FontWeight.Bold, fontSize = 20.sp, color = Color(0xFF79594F))
+                }
+            }
+            IconButton(onClick = { viewModel.eliminarPastel(pastel) }) {
+                Icon(Icons.Default.Delete, contentDescription = "Eliminar", tint = Color.Red)
+            }
+        }
+    }
+}
+
+// ... (La función CarritoDesplegable se mantiene igual) ...
 @Composable
 fun CarritoDesplegable(
     expanded: Boolean,
@@ -321,40 +360,6 @@ fun CarritoDesplegable(
                     fontSize = 20.sp,
                     color = Color(0xFF5D4037)
                 )
-            }
-        }
-    }
-}
-
-@Composable
-fun ItemCarrito(pastel: Catalogo, viewModel: CatalogoViewModel) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 4.dp)
-            .border(1.dp, Color(0xFF886655), RoundedCornerShape(10.dp)),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFFFF3E0))
-    ) {
-        Row(
-            modifier = Modifier.padding(8.dp).fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Column(modifier = Modifier.weight(1f)) {
-                Text(pastel.nombre, fontWeight = FontWeight.Bold, color = Color(0xFF5D4037))
-                Text("$${pastel.precio}", fontSize = 12.sp, color = Color(0xFF5D4037))
-            }
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = { viewModel.actualizarCantidad(pastel, pastel.cantidad - 1) }) {
-                    Text("-", fontWeight = FontWeight.Bold, fontSize = 20.sp, color = Color(0xFF79594F))
-                }
-                Text("${pastel.cantidad}", fontWeight = FontWeight.Bold, color = Color(0xFF5D4037))
-                IconButton(onClick = { viewModel.actualizarCantidad(pastel, pastel.cantidad + 1) }) {
-                    Text("+", fontWeight = FontWeight.Bold, fontSize = 20.sp, color = Color(0xFF79594F))
-                }
-            }
-            IconButton(onClick = { viewModel.eliminarPastel(pastel) }) {
-                Icon(Icons.Default.Delete, contentDescription = "Eliminar", tint = Color.Red)
             }
         }
     }
