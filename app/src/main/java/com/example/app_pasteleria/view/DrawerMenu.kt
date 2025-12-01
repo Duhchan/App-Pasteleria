@@ -73,15 +73,6 @@ fun DrawerMenu(
                         .align(Alignment.BottomCenter)
                         .padding(10.dp)
                 )
-                Icon(
-                    Icons.Default.ShoppingCart,
-                    contentDescription = "Carrito de Compra",
-                    tint = Color(0xFFFFF3E0),
-                    modifier = Modifier
-                        .align(Alignment.BottomEnd)
-                        .padding(end = 8.dp)
-                        .size(40.dp)
-                )
             }
         },
         bottomBar = {

@@ -12,7 +12,7 @@ import com.example.app_pasteleria.data.model.Usuario
 @Database(
 
     entities = [Catalogo::class, Usuario::class],
-    version = 3,
+    version = 4,
     exportSchema = false
 
 )
