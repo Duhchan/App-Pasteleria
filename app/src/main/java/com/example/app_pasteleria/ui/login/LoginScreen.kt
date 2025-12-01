@@ -48,6 +48,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import java.time.format.TextStyle
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 
 
 
@@ -98,7 +100,8 @@ fun LoginScreen(
                     // Evita que quede oculto
                     .fillMaxSize() // Hace que la columnna tome el todo el tamaño
                     .padding(16.dp)
-                    .background(Color(0xFFFFDFBF)), // gris Claro
+                    .background(Color(0xFFFFDFBF)) // gris Claro
+                    .verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(20.dp),
                 horizontalAlignment = Alignment.CenterHorizontally  // Centra horizontalmente
             //Define  que elementos dentro la columna estaran separados por 20.dp

@@ -41,26 +41,24 @@ fun CatalogoFormScreen(
 ) {
     // Función auxiliar para imagen
     fun obtenerImagenPastel(nombrePastel: String): Int {
-        val nombreLimpio = nombrePastel.lowercase().replace(" ", "").replace("de", "")
-        return when {
-            nombreLimpio.contains("chocolate") && nombreLimpio.contains("torta") -> R.drawable.tortachocolate
-            nombreLimpio.contains("fruta") -> R.drawable.tortafruta
-            nombreLimpio.contains("vainilla") -> R.drawable.tortavainilla
-            nombreLimpio.contains("manjar") -> R.drawable.tortacircularmanjar
-            nombreLimpio.contains("mousse") -> R.drawable.postremoussechocolate
-            nombreLimpio.contains("tiramisu") -> R.drawable.postretiramisu
-            nombreLimpio.contains("naranja") -> R.drawable.tortanaranja
-            nombreLimpio.contains("cheesecake") -> R.drawable.cheesecake
-            nombreLimpio.contains("manzana") -> R.drawable.empanadamanzana
-            nombreLimpio.contains("gluten") -> R.drawable.pansingluten
-            nombreLimpio.contains("santiago") -> R.drawable.tartasantiago
-            nombreLimpio.contains("brownie") -> R.drawable.brownie
-            nombreLimpio.contains("vegana") -> R.drawable.tortaceganachocolate
-            nombreLimpio.contains("avena") -> R.drawable.galletaavena
-            nombreLimpio.contains("cumple") -> R.drawable.tortacumpleanios
-            nombreLimpio.contains("boda") -> R.drawable.tortaboda
-            imagen != 0 -> imagen
-            else -> R.drawable.logo
+        return when (nombrePastel) {
+            "Torta de Chocolate" -> R.drawable.tortachocolate
+            "Torta de Frutas" -> R.drawable.tortafruta
+            "Torta de Vainilla" -> R.drawable.tortavainilla
+            "Torta de Manjar" -> R.drawable.tortacircularmanjar
+            "Mousse de Chocolate" -> R.drawable.postremoussechocolate
+            "Tiramisú Clásico" -> R.drawable.postretiramisu
+            "Torta de Naranja" -> R.drawable.tortanaranja
+            "Cheesecake sin Azúcar" -> R.drawable.cheesecake
+            "Empanada de Manzana" -> R.drawable.empanadamanzana
+            "Pan sin Gluten" -> R.drawable.pansingluten
+            "Tarta de Santiago" -> R.drawable.tartasantiago
+            "Brownie sin Gluten" -> R.drawable.brownie
+            "Torta Vegana de Chocolate" -> R.drawable.tortaceganachocolate
+            "Galletas Veganas de Avena" -> R.drawable.galletaavena
+            "Torta Especial de Cumpleaños" -> R.drawable.tortacumpleanios
+            "Torta Especial de Boda" -> R.drawable.tortaboda
+            else -> android.R.drawable.ic_menu_gallery
         }
     }
 

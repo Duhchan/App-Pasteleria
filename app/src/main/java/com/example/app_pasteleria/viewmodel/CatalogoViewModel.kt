@@ -26,6 +26,8 @@ class CatalogoViewModel(private val repository: CatalogoRepository) : ViewModel(
 
     var saludoYaMostrado: Boolean = false
 
+    var mostrarAlertaRegalo by mutableStateOf(false)
+        private set
 
     var comentario by mutableStateOf("")
         private set
@@ -86,17 +88,17 @@ class CatalogoViewModel(private val repository: CatalogoRepository) : ViewModel(
         val esCorreoDuoc = correo.lowercase().contains("duocuc.cl") ||
                 correo.lowercase().contains("profesor@duoc.cl")
 
-
         if (esCorreoDuoc && !saludoYaMostrado) {
             saludoYaMostrado = true
 
+            // ¡ACTIVAMOS EL POPUP AQUÍ!
+            mostrarAlertaRegalo = true
+
             viewModelScope.launch {
-                // Bajamos el carrito actual para ver si YA tiene el regalo
                 val carritoActual = repository.obtenerCarritoNube()
                 val yaTieneRegalo = carritoActual.any { it.nombre == "Torta de Regalo Duoc" }
 
                 if (!yaTieneRegalo) {
-                    // objeto del regalo
                     val tortaRegalo = Catalogo(
                         nombre = "Torta de Regalo Duoc",
                         precio = 0,
@@ -104,14 +106,13 @@ class CatalogoViewModel(private val repository: CatalogoRepository) : ViewModel(
                         imagen = R.drawable.tortagratis,
                         cantidad = 1
                     )
-
-                    // subimos al json
                     repository.agregarAlCarritoNube(tortaRegalo)
-
-
                     recargarCarrito()
                 }
             }
         }
+    }
+    fun cerrarAlertaRegalo() {
+        mostrarAlertaRegalo = false
     }
 }
