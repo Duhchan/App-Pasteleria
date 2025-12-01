@@ -6,8 +6,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.LazyColumn // Se puede borrar si no se usa, pero no molesta
+import androidx.compose.foundation.lazy.items // Se puede borrar
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
@@ -42,12 +42,35 @@ fun CatalogoFormScreen(
     imagen: Int = 0,
     viewModel: CatalogoViewModel
 ) {
-    // Función auxiliar para obtener imagen (por si acaso viene 0)
+    // --- FUNCIÓN CORREGIDA PARA OBTENER TODAS LAS IMÁGENES ---
     fun obtenerImagenPastel(nombrePastel: String): Int {
-        // (Tu lógica de imágenes original, resumida aquí para no alargar mucho)
-        return when (nombrePastel) {
-            "Torta de Chocolate" -> R.drawable.tortachocolate
-            else -> if (imagen != 0) imagen else R.drawable.logo // Fallback
+        // Normalizamos el texto (minúsculas y sin espacios) para facilitar la coincidencia
+        val nombreLimpio = nombrePastel.lowercase().replace(" ", "").replace("de", "")
+
+        return when {
+            // Coincidencias exactas o aproximadas con tus drawables
+            nombreLimpio.contains("chocolate") && nombreLimpio.contains("torta") -> R.drawable.tortachocolate
+            nombreLimpio.contains("fruta") -> R.drawable.tortafruta
+            nombreLimpio.contains("vainilla") -> R.drawable.tortavainilla
+            nombreLimpio.contains("manjar") -> R.drawable.tortacircularmanjar
+            nombreLimpio.contains("mousse") -> R.drawable.postremoussechocolate
+            nombreLimpio.contains("tiramisu") -> R.drawable.postretiramisu
+            nombreLimpio.contains("naranja") -> R.drawable.tortanaranja
+            nombreLimpio.contains("cheesecake") -> R.drawable.cheesecake
+            nombreLimpio.contains("manzana") -> R.drawable.empanadamanzana
+            nombreLimpio.contains("gluten") -> R.drawable.pansingluten
+            nombreLimpio.contains("santiago") -> R.drawable.tartasantiago
+            nombreLimpio.contains("brownie") -> R.drawable.brownie
+            nombreLimpio.contains("vegana") -> R.drawable.tortaceganachocolate
+            nombreLimpio.contains("avena") -> R.drawable.galletaavena
+            nombreLimpio.contains("cumple") -> R.drawable.tortacumpleanios
+            nombreLimpio.contains("boda") -> R.drawable.tortaboda
+
+            // Si ya venía una imagen válida (ID distinto de 0), úsala
+            imagen != 0 -> imagen
+
+            // Si no, muestra el logo por defecto
+            else -> R.drawable.logo
         }
     }
 
@@ -59,7 +82,7 @@ fun CatalogoFormScreen(
     // Estado para mostrar/ocultar el carrito desplegable
     var mostrarCarrito by remember { mutableStateOf(false) }
 
-    // Obtenemos la lista de pedidos (que ahora viene de la NUBE via ViewModel)
+    // Obtenemos la lista de pedidos de la NUBE
     val pastelesEnCarrito by viewModel.pedidos.collectAsState()
 
     // Resultado QrScannerScreen
@@ -88,7 +111,6 @@ fun CatalogoFormScreen(
                     containerColor = Color(0xFF79594F)
                 ),
                 actions = {
-                    // --- AQUÍ ESTÁ EL CARRITO DESPLEGABLE ---
                     Box {
                         IconButton(onClick = { mostrarCarrito = true }) {
                             Icon(
@@ -120,8 +142,9 @@ fun CatalogoFormScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // --- IMAGEN Y DETALLES DEL PRODUCTO ---
+            // Aquí usamos la función corregida
             Image(
-                painter = painterResource(id = if (imagen != 0) imagen else obtenerImagenPastel(nombre)),
+                painter = painterResource(id = obtenerImagenPastel(nombre)),
                 contentDescription = "Imagen Producto",
                 modifier = Modifier
                     .padding(vertical = 16.dp)
@@ -199,19 +222,17 @@ fun CatalogoFormScreen(
                         mostrarVentanaPromo = false
                     }
 
-                    // Creamos el objeto con el NUEVO modelo
                     val catalogo = Catalogo(
                         nombre = nombre,
-                        precio = precioUnitario, // Precio numérico limpio
+                        precio = precioUnitario,
                         descripcion = descripcion,
-                        imagen = if (imagen != 0) imagen else obtenerImagenPastel(nombre),
+                        // Guardamos la imagen correcta también en el carrito
+                        imagen = obtenerImagenPastel(nombre),
                         cantidad = cantidadNum
                     )
 
-                    // Guardamos (esto va a la nube ahora)
                     viewModel.guardarPastel(catalogo)
 
-                    // Limpiar campos
                     cantidad = TextFieldValue("")
                     promocion = TextFieldValue("")
                 },
@@ -226,7 +247,6 @@ fun CatalogoFormScreen(
             }
         }
 
-        // Alerta de Promo
         if (mostrarVentanaPromo) {
             AlertDialog(
                 onDismissRequest = { mostrarVentanaPromo = false },
@@ -274,22 +294,16 @@ fun CarritoDesplegable(
             if (pedidos.isEmpty()) {
                 Text("El carrito está vacío", color = Color(0xFF5D4037))
             } else {
-                // --- CAMBIO CLAVE AQUÍ ---
-                // Usamos Column normal con scroll en vez de LazyColumn
-                // Esto arregla el crash de "intrinsic measurements"
                 Column(
                     modifier = Modifier
-                        .heightIn(max = 400.dp) // Altura máxima antes de hacer scroll
-                        .verticalScroll(rememberScrollState()) // Habilitamos el scroll
+                        .heightIn(max = 400.dp)
+                        .verticalScroll(rememberScrollState())
                 ) {
                     pedidos.forEach { pastel ->
                         ItemCarrito(pastel, viewModel)
                     }
                 }
-                // -------------------------
-
                 Spacer(modifier = Modifier.height(10.dp))
-                // Calculamos total sumando precio * cantidad
                 val total = pedidos.sumOf { it.precio * it.cantidad }
                 Text(
                     "Total: $$total",
