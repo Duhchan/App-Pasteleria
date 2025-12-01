@@ -182,7 +182,7 @@ fun CatalogoFormScreen(
                 },
                 label = { Text("Cantidad") },
                 modifier = Modifier.padding(horizontal = 20.dp).fillMaxWidth()
-                .testTag("inputCantidad")
+                    .testTag("inputCantidad")
             )
 
             OutlinedTextField(
@@ -195,7 +195,7 @@ fun CatalogoFormScreen(
                     }
                 },
                 modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp).fillMaxWidth()
-                .testTag("inputPromocion")
+                    .testTag("inputPromocion")
             )
 
 

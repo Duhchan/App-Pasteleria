@@ -1,4 +1,4 @@
-package com.example.app_pasteleria.viewmodel // Asegúrate de que el package sea correcto
+package com.example.app_pasteleria.viewmodel
 
 import com.example.app_pasteleria.MainDispatcherExtension
 import com.example.app_pasteleria.data.model.Catalogo
@@ -7,7 +7,6 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
@@ -18,34 +17,29 @@ import org.junit.jupiter.api.extension.ExtendWith
 class CatalogoViewModelTest {
 
     @Test
-    fun `se guarda correctamente el pastel`() = runTest {
-        // 1. Mockear el repositorio
+    fun `guardarPastel llama al repositorio para subir a la nube`() = runTest {
+
         val mockRepo = mockk<CatalogoRepository>(relaxed = true)
 
-        // 2. IMPORTANTE: Configurar el flow para que el init del ViewModel no falle
-        // Como el ViewModel llama a obtenerProductos() al iniciarse, debemos decirle qué devolver.
-        coEvery { mockRepo.obtenerProductos() } returns flowOf(emptyList())
+        coEvery { mockRepo.obtenerTortasDeInternet() } returns emptyList()
+        coEvery { mockRepo.obtenerCarritoNube() } returns emptyList()
 
-        // 3. Instanciar el ViewModel (ahora es seguro hacerlo)
+
         val viewModel = CatalogoViewModel(mockRepo)
 
-        // 4. Crear el objeto con los datos correctos
         val pastelNuevo = Catalogo(
-            nombre = "Prueba Unitaria",
-            precio = 1000, // <--- CORREGIDO: Antes tenías "$1000" (String), ahora es 1000 (Int)
-            descripcion = "Torta de test",
+            nombre = "Torta Test",
+            precio = 5000,
+            descripcion = "Descripción de prueba",
             imagen = 0,
             cantidad = 1,
-            comentario = "Test"
+            comentario = ""
         )
 
-        // 5. Ejecutar la acción
         viewModel.guardarPastel(pastelNuevo)
 
-        // 6. Esperar a que las corrutinas terminen
         advanceUntilIdle()
 
-        // 7. Verificar que se llamó al repositorio con el objeto correcto
-        coVerify { mockRepo.insertarCatalogo(pastelNuevo) }
+        coVerify { mockRepo.agregarAlCarritoNube(pastelNuevo) }
     }
 }

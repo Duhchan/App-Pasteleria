@@ -15,7 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 class LoginViewModelTest {
 
     @Test
-    fun `si devuelve falso marca error`() {
+    fun `si devuelve falso marca error de credenciales`() {
         // GIVEN
         val mockRepo = mockk<AuthRepository>()
         coEvery { mockRepo.login(any(), any()) } returns false
