@@ -42,17 +42,6 @@ fun DrawerMenu(
     // 2. OBSERVAMOS LA LISTA QUE VIENE DE LA API (viewModel.menuTortas)
     val listaTortas by viewModel.menuTortas.collectAsState()
 
-    // Estado para la alerta (si quieres mostrar el popup visualmente)
-    // Nota: La lógica de agregar el regalo ya la hace el ViewModel, esto es solo visual.
-    var mostrarAlertaDuoc by remember { mutableStateOf(false) }
-
-    // Activamos la alerta visual si es correo duoc (opcional, solo visual)
-    LaunchedEffect(Unit) {
-        if (correo.lowercase().contains("duocuc.cl")&& !viewModel.saludoYaMostrado) {
-            mostrarAlertaDuoc = true
-            viewModel.saludoYaMostrado = true
-        }
-    }
 
     Scaffold(
         topBar = {
@@ -143,10 +132,11 @@ fun DrawerMenu(
             }
         } // Fin LazyColumn
 
-        // 5. POPUP DE BIENVENIDA DUOC (Solo visual)
-        if (mostrarAlertaDuoc) {
+
+        // POPUP DE BIENVENIDA DUOC (Controlado por ViewModel)
+        if (viewModel.mostrarAlertaRegalo) {
             AlertDialog(
-                onDismissRequest = { mostrarAlertaDuoc = false },
+                onDismissRequest = { viewModel.cerrarAlertaRegalo() },
                 containerColor = Color(0xFFFFF3E0),
                 shape = RoundedCornerShape(20.dp),
                 modifier = Modifier.border(
@@ -181,7 +171,7 @@ fun DrawerMenu(
                         horizontalArrangement = Arrangement.Center
                     ) {
                         TextButton(
-                            onClick = { mostrarAlertaDuoc = false }
+                            onClick = { viewModel.cerrarAlertaRegalo() }
                         ) {
                             Text("¡Entendido!",
                                 fontWeight = FontWeight.Bold,
