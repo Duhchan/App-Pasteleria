@@ -5,14 +5,17 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.app_pasteleria.data.dao.CatalogoDao
+import com.example.app_pasteleria.data.dao.ComentarioDao
 import com.example.app_pasteleria.data.dao.UsuarioDao
 import com.example.app_pasteleria.data.model.Catalogo
 import com.example.app_pasteleria.data.model.Usuario
+import com.example.app_pasteleria.data.model.Comentario // <-- Añadir este
+
 
 @Database(
 
-    entities = [Catalogo::class, Usuario::class],
-    version = 4,
+    entities = [Catalogo::class, Usuario::class, Comentario::class],
+    version = 5,
     exportSchema = false
 
 )
@@ -20,6 +23,9 @@ import com.example.app_pasteleria.data.model.Usuario
 abstract class CatalogoDataBase: RoomDatabase(){
     abstract fun catalogoDao(): CatalogoDao
     abstract fun usuarioDao(): UsuarioDao
+
+    abstract fun comentarioDao(): ComentarioDao
+
     companion object{
         private var INSTANCE: CatalogoDataBase? = null
 

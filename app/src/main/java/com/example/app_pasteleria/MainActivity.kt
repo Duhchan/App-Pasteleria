@@ -20,7 +20,11 @@ class MainActivity : ComponentActivity() {
         val database = CatalogoDataBase.getDatabase(applicationContext)
 
         // Repositorios
-        val catalogoRepository = CatalogoRepository(database.catalogoDao())
+        val catalogoRepository = CatalogoRepository(
+            database.catalogoDao(),
+            database.comentarioDao(),
+            database.usuarioDao())
+
         val authRepository = AuthRepository(database.usuarioDao()) // Repo de usuarios
 
         // Factories

@@ -3,11 +3,18 @@ package com.example.app_pasteleria.data.repository
 import android.util.Log
 import com.example.app_pasteleria.R
 import com.example.app_pasteleria.data.dao.CatalogoDao
+import com.example.app_pasteleria.data.dao.ComentarioDao
+import com.example.app_pasteleria.data.dao.UsuarioDao
 import com.example.app_pasteleria.data.model.Catalogo
+import com.example.app_pasteleria.data.model.Comentario
 import com.example.app_pasteleria.remote.RetrofitInstance
 import kotlinx.coroutines.flow.Flow
 
-class CatalogoRepository(private val catalogoDao: CatalogoDao) {
+class CatalogoRepository(
+    private val catalogoDao: CatalogoDao,
+    private val comentarioDao: ComentarioDao,
+    private val usuarioDao: UsuarioDao
+) {
 
     // --- MÉTODOS LOCALES (Room) ---
     suspend fun insertarCatalogo(pastel: Catalogo) {
@@ -123,4 +130,23 @@ class CatalogoRepository(private val catalogoDao: CatalogoDao) {
             else -> R.drawable.logo
         }
     }
+
+    suspend fun guardarComentarioLocal(correoUsuario: String, textoComentario: String) {
+        // 1. Buscamos el objeto Usuario para obtener su ID
+        val usuario = usuarioDao.buscarPorCorreo(correoUsuario)
+
+        usuario?.let {
+            // 2. Creamos la entidad Comentario usando el ID del usuario
+            val nuevoComentario = Comentario(
+                texto = textoComentario,
+                idUsuario = it.id
+            )
+            // 3. Insertamos en la tabla de comentarios de Room
+            comentarioDao.insertarComentario(nuevoComentario)
+        }
+    }
+
+
+
+
 }

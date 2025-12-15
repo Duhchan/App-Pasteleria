@@ -4,7 +4,10 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import com.example.app_pasteleria.data.model.Usuario
+import com.example.app_pasteleria.data.model.UsuarioConComentarios
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface UsuarioDao {
@@ -19,4 +22,9 @@ interface UsuarioDao {
     // Verifica si el correo ya existe (opcional pero recomendado)
     @Query("SELECT * FROM usuarios WHERE correo = :correo LIMIT 1")
     suspend fun buscarPorCorreo(correo: String): Usuario?
+
+    @Transaction
+    @Query("SELECT * FROM usuarios WHERE id = :usuarioId")
+    fun obtenerUsuarioConComentarios(usuarioId: Int): Flow<UsuarioConComentarios>
+
 }

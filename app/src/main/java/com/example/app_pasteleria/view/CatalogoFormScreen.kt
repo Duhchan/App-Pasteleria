@@ -198,6 +198,19 @@ fun CatalogoFormScreen(
                     .testTag("inputPromocion")
             )
 
+            OutlinedTextField(
+                // Conectado al estado 'comentario' del ViewModel
+                value = viewModel.comentario,
+                onValueChange = viewModel::onComentarioChange,
+                label = { Text("Comentario/Nota Especial (Opcional)") },
+                placeholder = { Text("Ej: Sin manjar, mensaje 'Feliz Día'") },
+                singleLine = false, // Permite múltiples líneas
+                modifier = Modifier
+                    .padding(horizontal = 20.dp, vertical = 10.dp)
+                    .fillMaxWidth()
+                    .heightIn(min = 80.dp) // Altura mínima para que se vea bien
+                    .testTag("inputComentario")
+            )
 
             // Botón Agregar
             Button(
@@ -219,7 +232,7 @@ fun CatalogoFormScreen(
                         descripcion = descripcion,
                         imagen = obtenerImagenPastel(nombre),
                         cantidad = cantidadNum,
-                        comentario = viewModel.comentario
+                        comentario = viewModel.comentario.text
                     )
 
                     viewModel.guardarPastel(catalogo)
@@ -227,7 +240,7 @@ fun CatalogoFormScreen(
                     // Limpiar campos
                     cantidad = TextFieldValue("")
                     promocion = TextFieldValue("")
-
+                    viewModel.onComentarioChange(TextFieldValue(""))
                 },
                 enabled = cantidad.text.isNotBlank(),
                 colors = ButtonDefaults.buttonColors(

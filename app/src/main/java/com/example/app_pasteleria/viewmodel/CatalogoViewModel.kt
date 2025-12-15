@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import androidx.compose.ui.text.input.TextFieldValue
 
 class CatalogoViewModel(private val repository: CatalogoRepository) : ViewModel() {
 
@@ -29,7 +30,13 @@ class CatalogoViewModel(private val repository: CatalogoRepository) : ViewModel(
     var mostrarAlertaRegalo by mutableStateOf(false)
         private set
 
-    var comentario by mutableStateOf("")
+    var comentario by mutableStateOf(TextFieldValue(""))
+        private set
+
+    fun onComentarioChange(nuevoComentario: TextFieldValue) {
+        comentario = nuevoComentario
+    }
+    var usuarioLogueadoCorreo: String = "" // Almacena el correo del usuario logueado
         private set
 
     init {
@@ -59,7 +66,12 @@ class CatalogoViewModel(private val repository: CatalogoRepository) : ViewModel(
         viewModelScope.launch {
             // 1. Subimos el cambio
             repository.agregarAlCarritoNube(pastel)
-            // 2. Recargamos la lista para ver el cambio reflejado
+            //2. Room
+            val comentarioTexto = pastel.comentario
+            if(comentarioTexto.isNotBlank() && usuarioLogueadoCorreo.isNotBlank()){
+                repository.guardarComentarioLocal(usuarioLogueadoCorreo,comentarioTexto)
+            }
+            // 3. Recargamos la lista para ver el cambio reflejado
             recargarCarrito()
         }
     }
@@ -83,8 +95,11 @@ class CatalogoViewModel(private val repository: CatalogoRepository) : ViewModel(
 
 
     fun validarRegalo(correo: String) {
+        usuarioLogueadoCorreo = correo
+
         val esCorreoDuoc = correo.lowercase().contains("duocuc.cl") ||
                 correo.lowercase().contains("profesor@duoc.cl")
+
 
         if (esCorreoDuoc && !saludoYaMostrado) {
             saludoYaMostrado = true
